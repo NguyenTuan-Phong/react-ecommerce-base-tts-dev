@@ -1,0 +1,51 @@
+
+.policy-title {
+  text-align: center !important;
+  font-weight: bold !important;
+  margin-bottom: 12px !important;
+  font-size: 18px !important;
+  letter-spacing: 0.5px;
+}
+
+.policy-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.policy-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 18px;
+  color: #444;
+  padding-left: 12px;
+}
+
+.item{
+    display: flex;
+    gap: 5px;
+    font-size: 18px;
+}
+.icon{
+    color: #22a085;
+    font-size: 20px;
+}
+.policy-card{
+    margin-top: 10px;
+}
+.policy-card .ant-card-head {
+  border-bottom: 1px solid #e0e0e0 !important;
+  border-radius: 16px 16px 0 0 !important;
+  padding: 0;
+    background: #d8d8d6;
+}
+
+.policy-card-title {
+  text-align: center;
+  font-weight: bold;
+  font-size: 20px;
+  letter-spacing: 0.5px;
+  width: 100%;
+}

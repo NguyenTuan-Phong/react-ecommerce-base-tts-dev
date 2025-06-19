@@ -1,0 +1,63 @@
+export const products = [
+    {
+        id: "PAD0498",
+        name: "PAD 94 BEAN PACMAN",
+        img: "https://i.imgur.com/1.jpg",
+        price: 95000,
+        oldPrice: 120000,
+        status: "Còn hàng",
+        percent: "-21%",
+    },
+    {
+        id: "PAD0270",
+        name: "PAD 94 4 LINE FRIEND",
+        img: "https://i.imgur.com/2.jpg",
+        price: 95000,
+        oldPrice: 120000,
+        status: "Còn hàng",
+        percent: "-21%",
+    },
+    {
+        id: "PAD0160",
+        name: "PAD 83 YASUO AH LĂNG KIẾM",
+        img: "https://i.imgur.com/3.jpg",
+        price: 69000,
+        oldPrice: 90000,
+        status: "Còn hàng",
+        percent: "-23%",
+    },
+    {
+        id: "PAD0006",
+        name: "PAD 83 LOGITECH",
+        img: "https://i.imgur.com/4.jpg",
+        price: 69000,
+        oldPrice: 90000,
+        status: "Còn hàng",
+        percent: "-23%",
+    },
+    {
+        id: "PADLED0025",
+        name: "LÓT CHUỘT LED RGB 80x30 GENGAR",
+        img: "https://i.imgur.com/5.jpg",
+        price: 120000,
+        oldPrice: null,
+        status: "Hết hàng",
+        percent: null,
+    },
+    {
+        id: "PADLED0026",
+        name: "LÓT CHUỘT LED RGB 80x30 GENGAR",
+        img: "https://i.imgur.com/5.jpg",
+        price: 130000,
+        oldPrice: null,
+        status: "Hết hàng",
+        percent: null,
+    },
+];
+
+export const categories = [
+    "LÓT CHUỘT CỠ 26X21",
+    "LÓT CHUỘT CỠ 35X30",
+    "LÓT CHUỘT CỠ 45X40",
+    "LÓT CHUỘT CỠ 60X35",
+];
