@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { Input, Button, Form, message } from "antd";
-import "./changepassword.css";
+
 const ChangePassword = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-
   const onFinish = async (values: any) => {
     const { currentPassword, newPassword, confirmPassword } = values;
 
