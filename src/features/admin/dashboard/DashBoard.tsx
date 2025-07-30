@@ -15,7 +15,6 @@ const DashBoard = () => {
                 <h2 className="text-lg font-bold">Chào mừng, Admin!</h2>
                 <p className="text-sm">Chúc bạn một ngày làm việc hiệu quả 🌟</p>
             </div>
-            
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="bg-white border-gray-100 border p-6 rounded shadow-md flex items-cente  space-x-4 gap-3">
                     <UserOutlined className="w-10! h-10! text-blue-500! text-[40px]!" />
