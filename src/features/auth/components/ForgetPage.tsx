@@ -9,9 +9,9 @@ const ForgetPage = () => {
     return(
         <div>
             <div className="flex gap-3 max-w-[1400px] mx-auto py-5">
-                <Link to={'/'}>TRANG CHỦ</Link>
+                <Link to={'/'} className="link">TRANG CHỦ</Link>
                 <p>/</p>
-                <Link to={'/forget'}>LẤY LẠI MẬT KHẨU</Link>
+                <Link to={'/forget'} className="text-[black] font-bold section-text">LẤY LẠI MẬT KHẨU</Link>
             </div>
             <div className=" py-4">
                 <div className="flex flex-col max-w-[1400px] mx-auto gap-5 bg-[white] p-5">
@@ -21,7 +21,7 @@ const ForgetPage = () => {
                     onFinish={handleSendOTP}
                     name="form_forget"
                     >
-                        <div className="flex">
+                        <div className="flex flex-col md:flex-row md:items-center ">
                             <p className="w-[400px]">Nhập địa chỉ email đăng ký</p>
                             <Form.Item
                                 name="email"
@@ -40,7 +40,7 @@ const ForgetPage = () => {
                             </Form.Item>
                         </div>
                         <div className="flex">
-                            <div className="w-[400px]"></div>
+                            <div className="w-[412px]"></div>
                             <Form.Item>
                                 <Button loading={isPendingSendOTP} htmlType="submit" style={{background: '#29A07E', color: 'white', height: 48, width: 200}}>
                                     LẤY MẬT KHẨU

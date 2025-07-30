@@ -1,0 +1,12 @@
+.text-reveal {
+  font-size: 16px;
+  font-weight: bold;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.text-reveal span {
+  display: inline-block;
+  transition: opacity 0.2s ease;
+}

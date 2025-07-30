@@ -8,3 +8,42 @@ span {
   padding: 0;
   margin: 0;
 }
+
+/* Layout */
+body.dark-mode .ant-layout {
+  background-color: #121212 !important;
+  color: #fff !important;
+}
+
+/* Header/Footer */
+body.dark-mode .ant-layout-header,
+body.dark-mode .ant-layout-footer {
+  background-color: #121212 !important;
+}
+
+/* Content wrapper */
+body.dark-mode .ant-layout-content {
+  background-color: #121212 !important;
+}
+
+
+/* Mặc định Light */
+.link {
+  color: black;
+  font-weight: bold;
+}
+
+/* Dark mode */
+body.dark-mode .link {
+  color: white;
+}
+body.dark-mode .section-text {
+  color: #fff;
+}
+
+
+
+
+
+
+

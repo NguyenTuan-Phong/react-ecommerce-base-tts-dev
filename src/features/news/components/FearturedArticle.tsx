@@ -2,14 +2,7 @@ import { youtubeChanelVideos } from "../data/Data_YT";
 import { guides, type Guide } from "../data/Data_HD";
 import { intro } from "../data/Data_Intro";
 import Img3 from '../../../assets/img_yt/1.jpg'
-// interface Blog {
-//   id: string;
-//   title: string;
-//   image:string;
-//   description?: string;
-//   date?: string;        
-//   createdAt?: string;   
-// }
+
 const blog : Guide[] =[
 
     ...youtubeChanelVideos,
@@ -17,7 +10,6 @@ const blog : Guide[] =[
     ...intro,
     
 ];
-// Hàm so sánh ngày tháng giảm dần
 const compareByDate = (a: Guide, b: Guide): number => {
   const dateA = new Date(a.date || a.createdAt || 0).getTime();
   const dateB = new Date(b.date || b.createdAt || 0).getTime();

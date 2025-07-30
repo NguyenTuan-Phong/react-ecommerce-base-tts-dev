@@ -6,35 +6,41 @@ const OrderHistory = () => {
 
     return(
         <div className="flex flex-col gap-5">
-            <nav className="grid grid-cols-5 bg-[white] text-center font-bold ">
+            <nav className="grid grid-cols-6 bg-[white] text-center font-bold ">
                 <Link key={0} to={''} className={`h-12! content-center! ${activeTab === 0 ? 'text-[red]! border-b-2 border-[red]' : 'text-[black]!' } `}
                 onClick={() => setactiveTab(0)} 
                 >
                     Tất Cả
                 </Link>
-                <Link key={1} to={''} className={`h-12! content-center! ${activeTab === 1 ? 'text-[red]! border-b-2 border-[red]' : 'text-[black]!' }`}
+                <Link key={1} to={`status/${0}`} className={`h-12! content-center! ${activeTab === 1 ? 'text-[red]! border-b-2 border-[red]' : 'text-[black]!' }`}
                 onClick={() => setactiveTab(1)}
                 >
-                    Vận chuyển
+                    Chờ xác nhận
                 </Link>
-                <Link key={2} to={''} className={`h-12! content-center! ${activeTab === 2 ? 'text-[red]! border-b-2 border-[red]' : 'text-[black]!' }`}
+                <Link key={2} to={`status/${1}`} className={`h-12! content-center! ${activeTab === 2 ? 'text-[red]! border-b-2 border-[red]' : 'text-[black]!' }`}
                 onClick={() => setactiveTab(2)}
                 >
-                    Chờ giao hàng
+                    Đang vận chuyển
                 </Link>
-                <Link key={3} to={''} className={`h-12! content-center! ${activeTab === 3 ? 'text-[red]! border-b-2 border-[red]' : 'text-[black]!' }`}
+                <Link key={3} to={`status/${2}`} className={`h-12! content-center! ${activeTab === 3 ? 'text-[red]! border-b-2 border-[red]' : 'text-[black]!' }`}
                 onClick={() => setactiveTab(3)}
                 >
-                    Hoàn Thành
+                    Đang giao
                 </Link>
-                <Link key={4} to={''} className={`h-12! content-center! ${activeTab === 4 ? 'text-[red]! border-b-2 border-[red]' : 'text-[black]!' }`}
+                <Link key={4} to={`status/${3}`} className={`h-12! content-center! ${activeTab === 4 ? 'text-[red]! border-b-2 border-[red]' : 'text-[black]!' }`}
                 onClick={() => setactiveTab(4)}
                 >
-                    Đã Hủy
+                    Hoàn thành
+                </Link>
+                <Link key={5} to={`status/${4}`} className={`h-12! content-center! ${activeTab === 5 ? 'text-[red]! border-b-2 border-[red]' : 'text-[black]!' }`}
+                onClick={() => setactiveTab(5)}
+                >
+                    Đã hủy
                 </Link>
             </nav>
             <div>
                 <Outlet/>
+
             </div>
         </div>
     )

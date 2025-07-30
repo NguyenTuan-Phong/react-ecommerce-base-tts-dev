@@ -1,8 +1,6 @@
 import { create } from "zustand";
 import type { Category, Product } from "../types";
 
-
-
 interface CategoryState {
   categories: Category[];
   setCategories: (categories: Category[]) => void;

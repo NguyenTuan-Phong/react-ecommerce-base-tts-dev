@@ -1,25 +1,34 @@
 import { useQuery } from '@tanstack/react-query';
-import { useProductStore } from '../../../store';
 import { fetchData } from '../../../services/api';
 
-const categoryIds = [1]; // truyền nhiều danh mục ở đây
+interface Category {
+  id: number;
+  name: string;
+  categoryItems: { id: number; name: string }[];
+}
 
-export const useProducts = () => {
+export const useProducts = (categories: Category[]) => {
+  const categoryIds = categories.map(cat => cat.id);
+
   return useQuery({
-    queryKey: ['products'],
+    queryKey: ['products-grouped-by-parent', categoryIds], 
     queryFn: async () => {
-      const allProducts: any[] = [];
+      const result: Record<number, any[]> = {};
 
-      for (const id of categoryIds) {
-        const res = await fetchData(`/products/getByCategoryItem/${id}?page=0&size=10&sortBy=id&sortDirection=asc`);
-        if (res?.data?.content) {
-          allProducts.push(...res.data.content);
-        }
-      }
+      await Promise.all(
+        categories.map(async (category) => {
+          const res = await fetchData(
+            `/products/getByCategory?categoryId=${category.id}`
+          );
+          result[category.id] = res?.data?.content || [];
+        })
+      );
 
-     useProductStore.getState().setProducts(allProducts);
-      return { data: { content: allProducts } };
+      return result;
     },
+    enabled: categoryIds.length > 0,
+    refetchOnWindowFocus: false,
+    retry: false,
+    refetchOnMount: false
   });
 };
-

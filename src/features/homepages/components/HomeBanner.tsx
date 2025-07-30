@@ -130,7 +130,7 @@ const HomeBanner = () => {
                     ))}
                 </div>
                 <div className={`flex-3 flex flex-col gap-2 ${hoverId && "hidden"}`}>
-                    <div className="flex gap-2 ">
+                    <div className="flex flex-col gap-2">
                         <section className="flex-3 w-[770px] h-full object-cover relative overflow-hidden">
                             <Carousel autoplay={{dotDuration : true}} autoplaySpeed={10000}>
                                 <div>

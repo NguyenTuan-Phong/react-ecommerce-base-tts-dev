@@ -8,9 +8,9 @@ const RegisterPage = () => {
     return(
         <div className="max-w-[1400px] mx-auto">
             <div className="flex gap-3 py-5 mb-2">
-                <Link to={'/'}>TRANG CHỦ</Link>
+                <Link to={'/'} className="link">TRANG CHỦ</Link>
                 <p>/</p>
-                <Link to={'/register'}>ĐĂNG KÝ TÀI KHOẢN THÀNH VIÊN</Link>
+                <Link to={'/register'} className="link">ĐĂNG KÝ TÀI KHOẢN THÀNH VIÊN</Link>
             </div>
             <div className="bg-[white] p-5 mb-5 border-b-[2px] border-blue-600">
                 <Form
@@ -22,8 +22,8 @@ const RegisterPage = () => {
                 }}
                 >
                     <p className="text-[24px] text-center mb-4">Tạo tài khoản khách hàng cá nhân</p>
-                    <div className="flex max-w-[800px] mx-auto">
-                        <p className="w-[180px] pt-3">Email đăng ký</p>
+                    <div className="flex max-w-[800px] mx-auto flex-col md:flex-row md:items-center gap-1">
+                        <p className="w-[180px]">Email đăng ký</p>
                         <Form.Item className="flex-1"
                         name="email"
                         rules={[
@@ -36,8 +36,8 @@ const RegisterPage = () => {
                             <Input style={{height:48}} placeholder="Nhập Email đăng ký." />
                         </Form.Item>
                     </div>
-                    <div className="flex max-w-[800px] mx-auto">
-                        <p className="w-[180px] pt-3">Tên</p>
+                    <div className="flex max-w-[800px] mx-auto flex-col md:flex-row md:items-center gap-1 ">
+                        <p className="w-[180px]">Tên</p>
                         <Form.Item className="flex-1"
                         name="fullName"
                         rules={[
@@ -49,8 +49,8 @@ const RegisterPage = () => {
                             <Input style={{height:48}} placeholder="Nhập tên." />
                         </Form.Item>
                     </div>
-                    <div className="flex max-w-[800px] mx-auto">
-                        <p className="w-[180px] pt-3">Số điện thoại</p>
+                    <div className="flex max-w-[800px] mx-auto flex-col md:flex-row md:items-center gap-1">
+                        <p className="w-[180px] ">Số điện thoại</p>
                         <Form.Item className="flex-1"
                         name="phoneNumber"
                         rules={[
@@ -66,8 +66,8 @@ const RegisterPage = () => {
                             <Input style={{height:48}} placeholder="Nhập số điện thoại." />
                         </Form.Item>
                     </div>
-                    <div className="flex max-w-[800px] mx-auto">
-                        <p className="w-[180px] pt-3">Giới tính</p>
+                    <div className="flex max-w-[800px] mx-auto flex-col md:flex-row md:items-center gap-1">
+                        <p className="w-[180px]">Giới tính</p>
                         <Form.Item name="gender" className="flex-1"
                             rules={[{ required: true, message: "Vui lòng chọn giới tính" }]}
                         >
@@ -77,11 +77,11 @@ const RegisterPage = () => {
                             </Radio.Group>
                         </Form.Item>
                     </div>
-                    <div className="flex max-w-[800px] mx-auto pb-[24px]">
+                    <div className="flex max-w-[800px] mx-auto pb-[24px] flex-col md:flex-row md:items-center gap-1">
                         <p className="w-[180px] pt-3">Ngày sinh</p>
-                        <Form.Item className="flex-1 flex gap-3" style={{ marginBottom: 0 }}>
+                        <Form.Item className="flex-1 flex gap-2" style={{ marginBottom: 0 }}>
                             <Form.Item name="birthDay" rules={[{ required: true, message: "Chọn ngày" }]} noStyle>
-                                <Select placeholder="- Ngày -" style={{ width: 100, height: 48 }}>
+                                <Select placeholder="- Ngày -" style={{ width: 95, height: 48 }}>
                                     {[...Array(31)].map((_, i) => (
                                         <Select.Option key={i + 1} value={i + 1}>{i + 1}</Select.Option>
                                     ))}
@@ -95,7 +95,7 @@ const RegisterPage = () => {
                                 </Select>
                             </Form.Item>
                             <Form.Item name="birthYear" rules={[{ required: true, message: "Chọn năm" }]} noStyle>
-                                <Select placeholder="Năm" style={{ width: 120, height: 48 }}>
+                                <Select placeholder="Năm" style={{ width: 110, height: 48 }}>
                                     {Array.from({ length: 100 }, (_, i) => {
                                         const year = new Date().getFullYear() - i;
                                         return <Select.Option key={year} value={year}>{year}</Select.Option>;
@@ -104,8 +104,8 @@ const RegisterPage = () => {
                             </Form.Item>
                         </Form.Item>
                     </div>
-                    <div className="flex max-w-[800px] mx-auto">
-                        <p className="w-[180px] pt-3">Mật khẩu</p>
+                    <div className="flex max-w-[800px] mx-auto flex-col md:flex-row md:items-center gap-1">
+                        <p className="w-[180px]">Mật khẩu</p>
                         <Form.Item className="flex-1"
                         name="password"
                         rules={[
@@ -121,8 +121,8 @@ const RegisterPage = () => {
                             <Input.Password style={{height:48}} placeholder="Nhập mật khẩu." />
                         </Form.Item>
                     </div>
-                    <div className="flex max-w-[800px] mx-auto">
-                        <p className="w-[180px] pt-3">Nhập lại mật khẩu</p>
+                    <div className="flex max-w-[800px] mx-auto flex-col md:flex-row md:items-center gap-1">
+                        <p className="w-[180px]">Nhập lại mật khẩu</p>
                         <Form.Item className="flex-1"
                         name="re_password"
                         dependencies={['password']}
@@ -144,8 +144,8 @@ const RegisterPage = () => {
                             <Input.Password style={{height:48}} placeholder="Nhập lại mật khẩu." />
                         </Form.Item>
                     </div>       
-                    <div className="flex max-w-[800px] mx-auto">
-                        <p className="w-[180px] pt-3">Tỉnh/TP</p>
+                    <div className="flex max-w-[800px] mx-auto flex-col md:flex-row md:items-center gap-1">
+                        <p className="w-[180px]">Tỉnh/TP</p>
                         <Form.Item className="flex-1"
                         name="city"
                         >
@@ -158,8 +158,8 @@ const RegisterPage = () => {
                             </Select>
                         </Form.Item>
                     </div>
-                    <div className="flex max-w-[800px] mx-auto">
-                        <p className="w-[180px] pt-3">Địa chỉ</p>
+                    <div className="flex max-w-[800px] mx-auto flex-col md:flex-row md:items-center gap-1">
+                        <p className="w-[180px]">Địa chỉ</p>
                         <Form.Item className="flex-1"
                         name="address"
                         rules={[
@@ -171,7 +171,7 @@ const RegisterPage = () => {
                             <Input style={{height:48}} placeholder="Nhập địa chỉ." />
                         </Form.Item>
                     </div>
-                    <div className="flex max-w-[800px] mx-auto">
+                    <div className="flex max-w-[800px] mx-auto ">
                         <p className="w-[180px] pt-3"></p>
                         <Form.Item className="flex-1"
                         

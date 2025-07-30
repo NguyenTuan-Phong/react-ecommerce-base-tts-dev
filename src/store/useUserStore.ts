@@ -5,6 +5,26 @@ export interface User {
   username: string
   token: string
   verified: boolean
+  role :  Role
+  id: string 
+  email: string 
+  phoneNumber: string
+  fullName: string
+  gender: number
+  address: string | null
+  dateOfBirth: string | null
+  statusUser: number | null
+  refreshToken: string
+}
+
+export interface Role {
+  name: string
+  permissions: Permissions[]
+}
+
+export interface Permissions {
+  id: string,
+  permissionKey: string
 }
 
 interface UserStore {
@@ -20,7 +40,7 @@ const useUserStore = create<UserStore>() (
             isLoggedIn: false,
             login: (user) => set(() => ({ user, isLoggedIn: true })),
             logout: () => {
-                set({ isLoggedIn: false });
+                set({ isLoggedIn: false, user: null });
                 useCartStore.getState().clearCart();
               },        
             }),

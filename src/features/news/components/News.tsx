@@ -3,30 +3,35 @@ import { latestPosts } from "../data/Data_New";
 import { Col, Row } from "antd";
 import FearturedArticle from "./FearturedArticle";
 import Img from '../../../assets/img_yt/17-maxresdefault.jpg'
+import useIsMobile from "../../../components/responsive/useIsMobile";
 const News =()=>{
      const mainPost = latestPosts[0];
-    const sidePosts = latestPosts.slice(1);
+     const sidePosts = latestPosts.slice(1);
+     const isMobile = useIsMobile(); 
+     const displayedPosts = isMobile ? sidePosts.slice(0, 2) : sidePosts; 
+
+
 
     return(
         <div>
             <section className="flex gap-4 py-[20px]">
-                <Link style={{color : 'black', fontWeight : 'bold'}} to={'/'}>
+                <Link className="link" to={'/'}>
                     TRANG CHỦ
                 </Link>
-                <p>/</p>
-                <p className="font-bold">TIN TỨC</p>
+                <p className='section-text'>/</p>
+                <p className="font-bold section-text">TIN TỨC</p>
             </section>
             <div className="flex gap-5">
-                <Link style={{color : 'black'}} to={'/yt'}>
+                <Link className="link" to={'/yt'}>
                     YOUTUBE CHANEL
                 </Link>
-                <Link style={{color : 'black'}} to={'/game'}>
+                <Link className="link" to={'/game'}>
                     GAME
                 </Link>
-                <Link style={{color : 'black'}} to={'/hd'}>
+                <Link className="link" to={'/hd'}>
                     HƯỚNG DẪN
                 </Link>
-                <Link style={{color : 'black'}} to={'/intro'}>
+                <Link className="link" to={'/intro'}>
                     GIỚI THIỆU
                 </Link>
             </div>
@@ -38,10 +43,11 @@ const News =()=>{
                <Col xs={24} sm={24} md={16} lg={16}>
                     <a href={mainPost.url} className="block relative group">
                         <img
-                            src={Img}
-                            alt={mainPost.title}
-                            className="w-full h-[380px] object-cover rounded-[24px]"
+                        src={Img}
+                        alt={mainPost.title}
+                        className="w-full object-cover rounded-[24px] h-[200px] sm:h-[250px] md:h-[300px] lg:h-[380px]"
                         />
+
                         <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent rounded-b-[24px] p-6">
                             <div className="text-white text-xl font-bold mb-3">
                                 {mainPost.title}
@@ -53,22 +59,25 @@ const News =()=>{
                             </div>
                         </div>
                     </a>
-                    <div className="grid grid-cols-3 gap-4 mt-4">
-                        {sidePosts.map(post => (
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+                        {displayedPosts.map(post => (
                             <a
-                                href={post.url}
-                                key={post.id}
-                                className="block group"
+                            href={post.url}
+                            key={post.id}
+                            className="block group"
                             >
-                                <img
-                                    src={Img}
-                                    alt={post.title}
-                                    className="w-full h-[120px] object-cover rounded-[16px] mb-2"
-                                />
-                                <div className="font-medium text-sm line-clamp-2" style={{color:'black'}}>{post.title}</div>
+                            <img
+                                src={Img}
+                                alt={post.title}
+                                className="w-full h-[100px] object-cover rounded-[16px] mb-2"
+                            />
+                            <div className="font-medium text-sm line-clamp-2 text-black">
+                                {post.title}
+                            </div>
                             </a>
                         ))}
                     </div>
+
                 </Col>
                 <Col xs={24} sm={24} md={8} lg={8}>
                     <FearturedArticle/>

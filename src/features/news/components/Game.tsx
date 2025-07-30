@@ -8,27 +8,27 @@ const Intro = () => {
   return (
     <div>
       <section className="flex gap-4 py-[20px]">
-        <Link style={{ color: "black", fontWeight: "bold" }} to={"/"}>
+        <Link className="link" to={"/"}>
           TRANG CHỦ
         </Link>
-        <p>/</p>
-        <Link style={{ color: "black", fontWeight: "bold" }} to={"/news"}>
+        <p className='section-text'>/</p>
+        <Link className="link" to={"/news"}>
           TIN TỨC
         </Link>
-        <p>/</p>
-        <p className="font-bold">GAME</p>
+        <p className='section-text'>/</p>
+        <p className="font-bold section-text">GAME</p>
       </section>
       <div className="flex gap-5 mb-2">
-        <Link style={{ color: "black" }} to={"/yt"}>
+        <Link className="link" to={"/yt"}>
           YOUTUBE CHANEL
         </Link>
-        <Link style={{ color: "black" }} to={"/game"}>
+        <Link className="link" to={"/game"}>
           GAME
         </Link>
-        <Link style={{ color: "black" }} to={"/hd"}>
+        <Link className="link" to={"/hd"}>
           HƯỚNG DẪN
         </Link>
-        <Link style={{ color: "black" }} to={"/intro"}>
+        <Link className="link" to={"/intro"}>
           GIỚI THIỆU
         </Link>
       </div>

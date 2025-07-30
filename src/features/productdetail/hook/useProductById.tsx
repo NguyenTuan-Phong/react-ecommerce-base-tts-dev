@@ -6,9 +6,11 @@ export const useProductById = (id: string | undefined) => {
     queryKey: ['product', id],
     queryFn: async () => {
       if (!id) throw new Error("Không có ID sản phẩm");
-      const res = await fetchData(`/products/getById/${id}`);
+      const res = await fetchData(`products/getById/${id}`);
       return res.data;
     },
-    enabled: !!id, // chỉ gọi khi có id
+    enabled: !!id, 
+    refetchOnWindowFocus: false,
+    retry: false,
   });
 };

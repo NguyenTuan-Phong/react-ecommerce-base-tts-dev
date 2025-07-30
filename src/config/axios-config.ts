@@ -3,35 +3,92 @@ import { baseURL } from "./config";
 import useUserStore from "../store/useUserStore";
 import { toast } from "react-toastify";
 
-
 export const api = axios.create({
     baseURL,
-    headers: {
-        "Content-Type": "application/json"
-    },
-    timeout: 5000
 });
 
+let isRefreshing = false;
+let failedQueue: any[] = [];
+
+const processQueue = (error: any, token: string | null = null) => {
+    failedQueue.forEach(prom => {
+        if (error) {
+            prom.reject(error);
+        } else {
+            prom.resolve(token);
+        }
+    });
+    failedQueue = [];
+};
 
 api.interceptors.response.use(
-  (response) => {
-    if(response.config.method === "get") {
-       return response.data
+    (response) => {
+        if (response.config.method === "get") {
+            return response.data;
+        }
+        toast.success(response.data.message);
+        return response.data;
+    },
+    async (error) => {
+        const originalRequest = error.config;
+        if (error.response && 
+          (error.response.status === 401 || error.response.status === 403) && 
+          !originalRequest._retry && 
+          !originalRequest.url.includes("/auth/authenticate")
+        ) {
+            originalRequest._retry = true;
+            const userStore = useUserStore.getState();
+            const refreshToken = userStore.user?.refreshToken;
+
+            if (!isRefreshing) {
+                isRefreshing = true;
+                try {
+                    const res = await axios.post(`${baseURL}/auth/refresh-token`, {
+                        refreshToken,
+                    });
+                    const { token: accessToken, refreshToken: newRefreshToken } = res.data;
+
+                    useUserStore.getState().login({
+                        ...userStore.user!,
+                        token: accessToken,
+                        refreshToken: newRefreshToken,
+                    });
+                    processQueue(null, accessToken);
+                    isRefreshing = false;
+
+                    originalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
+                    return api(originalRequest);
+                } catch (err) {
+                    processQueue(err, null);
+                    isRefreshing = false;
+                    useUserStore.getState().logout();
+                    return Promise.reject(err);
+                }
+            }
+
+            return new Promise(function (resolve, reject) {
+                failedQueue.push({
+                    resolve: (token: string) => {
+                        originalRequest.headers["Authorization"] = `Bearer ${token}`;
+                        resolve(api(originalRequest));
+                    },
+                    reject: (err: any) => {
+                        reject(err);
+                    }
+                });
+            });
+        }
+
+        if (error.response && error.response.data) {
+            return Promise.reject(error.response.data);
+        }
+        if (error.request) {
+            return Promise.reject(
+                "Network Error: No response received from the server"
+            );
+        }
     }
-    toast.success(response.data.message);
-    return response.data
-  },
-  (error) => {
-    if(error.response && error.response.data) {
-      return Promise.reject(error.response.data);
-    }
-    if (error.request) {
-      return Promise.reject(
-        "Network Error: No response received from the server"
-      );
-    }
-  }
-)
+);
 
 api.interceptors.request.use(
   
@@ -46,30 +103,23 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 )
 
-// METHOD
-// hàm get có kiểu trả về là 1 promise dạng T* (T có thể là kiểu Product)
-
 export const get = <T>({
   url,
   params,
-  config,   // một đối tượng chứa các tùy chọn khác liên quan đến yêu cầu.
+  config,  
 } : {
   url: string;
   params?: AxiosRequestConfig["params"];
   config?: AxiosRequestConfig;
 }) : Promise<T> =>
-  // tham số 1 là url , 2 là config
+
   api.get(url, {
-    url,
+    // url,
     params,
     ...config,
   });
 
-
-// hàm post 
-
 export const post = <T>({
-  // Tránh xung đột cú pháp trong một số phiên bản cũ hơn của TypeScript (đặc biệt là với JSX sẽ bị nhầm lẫn cú pháp đây là thẻ).
   url,
   data,
   config,

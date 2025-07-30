@@ -7,9 +7,9 @@ const LoginPage = () => {
     return(
         <div className="">
             <div className="flex gap-3 max-w-[1400px] mx-auto py-5">
-                <Link to={'/'}>TRANG CHỦ</Link>
-                <p>/</p>
-                <Link to={'/login'}>ĐĂNG NHẬP TÀI KHOẢN</Link>
+                <Link to={'/'} className="link">TRANG CHỦ</Link>
+                <p className="section-text">/</p>
+                <Link to={'/login'}className="link">ĐĂNG NHẬP TÀI KHOẢN</Link>
             </div>
             <div className="py-4">
                 <div className="md:flex max-w-[1400px] mx-auto gap-5 bg-[white] p-5">
@@ -19,28 +19,23 @@ const LoginPage = () => {
                             name="form_login"
                             onFinish={handleLogin}
                         >   
-                            <div className="flex">
-                                <p className="text-[16px] w-[180px] pt-2">Email đăng nhập</p>
-                                <Form.Item
-                                    name="email"
-                                    className="flex-1"
-                                    rules={[
-                                        {
-                                            required : true,
-                                            message: "Vui lòng nhập Email!",
-                                        },
-                                        {
-                                            type: "email",
-                                            message: "Email không hợp lệ"
-                                        }
-                                    ]}
-                                >
-                                    <Input style={{height: 48}} placeholder="Vui lòng nhập Email"/>
-                                </Form.Item>
+                            <div className="flex flex-col md:flex-row md:items-center gap-1 w-full">
+                            <p className="text-[16px] md:w-[180px] w-full">Email đăng nhập</p>
+                            <Form.Item
+                                name="email"
+                                className="flex-1 w-full"
+                                rules={[
+                                { required: true, message: "Vui lòng nhập Email!" },
+                                { type: "email", message: "Email không hợp lệ" }
+                                ]}
+                            >
+                                <Input style={{ height: 48 }} placeholder="Vui lòng nhập Email" />
+                            </Form.Item>
                             </div>
+
                             
-                            <div className="flex">
-                                <p className="text-[16px] w-[180px] pt-2">Mật khẩu</p>
+                            <div className="flex flex-col md:flex-row md:items-center gap-1 w-full">
+                                <p className="text-[16px] w-[180px]">Mật khẩu</p>
                                 <Form.Item
                                     name="password"
                                     className="flex-1"
@@ -54,7 +49,7 @@ const LoginPage = () => {
                                 </Form.Item>
                             </div>
                             <div className="flex">
-                                <div className="w-[180px]"></div>
+                                <div className="w-0 sm:w-[180px] md:w-[180px] lg:w-[180px]"></div>
                                 <Form.Item className="flex-1">
                                     <Button loading={isPending} htmlType="submit" style={{height : 48,width : 150, background : '#29A07E', fontSize: '16px', color : 'white'}}>
                                         {isPending ? "Đang đăng nhập" : "Đăng nhập"}

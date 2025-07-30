@@ -7,33 +7,34 @@ import {
 import { Link } from 'react-router-dom'
 const FooterContent = () => {
     return(
-        <div className="max-w-[1400px] flex m-auto gap-5">
-            <section className='flex-1 bg-[white] p-5 rounded-[8px] flex flex-col gap-4'>
+       <div className="max-w-[1400px] flex flex-col sm:flex-row m-auto gap-5">
+           <section className='flex-1 bg-[white] p-5 rounded-[8px] flex flex-col gap-4'>
                 <div className="flex">
                     <h1 className="font-bold text-[24px] flex-1">TIN TỨC && SỰ KIỆN</h1>
                     <Link to={'/news'}>
-                        <div className="border-[green] border py-3 px-5 rounded-3xl hover:cursor-pointer">
+                        <div className="border-gray-300 border py-3 px-5 rounded-3xl hover:cursor-pointer">
                             <p>Xem thêm</p>
                         </div>
                     </Link>
                     
                 </div>
                 <div className='flex flex-col gap-3'>
-                    <div className='grid grid-cols-2 gap-2'>
-                        <img className='' src={LED} alt="LED" />
-                        <div className='flex gap-1'>
-                            <div className='flex flex-col gap-1 p-2 h-16! bg-[#29A07E] rounded-[5px] text-[white] text-center'>
-                                <span>20.10</span>
-                                <span className='text-[18px] font-bold'>2002</span>
+                    <div className="flex flex-col sm:flex-row gap-2 ">
+                        <img className="w-full sm:w-1/2" src={LED} alt="LED" />
+                        
+                        <div className="flex gap-1 sm:w-1/2">
+                            <div className="flex flex-col gap-1 p-2 h-16 bg-[#29A07E] rounded-[5px] text-white text-center">
+                            <span>20.10</span>
+                            <span className="text-[18px] font-bold">2002</span>
                             </div>
-                            <div className='font-bold'> 
-                                CHẤT ! SIÊU CHẤT ! LED RGB CHẤT NHẤT BẠN TỪNG THẤY LUÔN !!
+                            <div className="font-bold">
+                            CHẤT ! SIÊU CHẤT ! LED RGB CHẤT NHẤT BẠN TỪNG THẤY LUÔN !!
                             </div>
                         </div>
                     </div>
-                    <div className='grid grid-cols-2 gap-2'>
-                        <img className='' src={PS24} alt="LED" />
-                        <div className='flex gap-1'>
+                    <div className='flex flex-col sm:flex-row gap-2'>
+                        <img className='w-full sm:w-1/2' src={PS24} alt="LED" />
+                        <div className='flex gap-1 sm:w-1/2'>
                             <div className='flex flex-col gap-1 p-2 h-16! bg-[#29A07E] rounded-[5px] text-[white] text-center'>
                                 <span>20.10</span>
                                 <span className='text-[18px] font-bold  '>2002</span>
@@ -43,9 +44,9 @@ const FooterContent = () => {
                             </div>
                         </div>
                     </div>
-                    <div className='grid grid-cols-2 gap-2'>
-                        <img className='' src={BP} alt="LED" />
-                        <div className='flex gap-1'>
+                    <div className='flex flex-col sm:flex-row gap-2'>
+                        <img className='w-full sm:w-1/2' src={BP} alt="LED" />
+                        <div className='flex gap-1 sm:w-1/2'>
                             <div className='flex flex-col gap-1 p-2 h-16! bg-[#29A07E] rounded-[5px] text-[white] text-center'>
                                 <span>20.10</span>
                                 <span className='text-[18px] font-bold  '>2002</span>
@@ -61,7 +62,7 @@ const FooterContent = () => {
                 <div className="flex">
                     <h1 className="font-bold text-[24px] flex-1">YOUTUBE CHANNEL</h1>
                     <Link to={'/yt'}>
-                        <div className="border-[green] border py-3 px-5 rounded-3xl hover:cursor-pointer">
+                        <div className="border-gray-300 border py-3 px-5 rounded-3xl hover:cursor-pointer">
                             <p>Xem thêm</p>
                         </div>
                     </Link>
@@ -76,7 +77,7 @@ const FooterContent = () => {
                             <PlayCircleOutlined className='text-[80px] text-[#29A07E]!'/>
                         </div>
                     </div>
-                    <div className='flex gap-3'>
+                    <div className='flex gap-3 lg:flex hidden'>
                         <div className='flex-1 relative'>
                             <img className='rounded-[8px] hover:cursor-pointer' src={PS24} alt="PS24" />
                             <p className='font-bold text-center pt-5'>TTS CODEC</p>

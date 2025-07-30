@@ -1,238 +1,243 @@
-import { Button, Card, Col, Row, Typography } from "antd";
-import { useState} from "react";
+import { Button, Col, Row, Typography } from "antd";
+import { useState, useEffect } from "react"; 
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { toast} from "react-toastify";
-
 import {
   CreditCardOutlined,
   InboxOutlined,
   TruckOutlined,
   CheckSquareOutlined,
   PhoneOutlined,
+  StarFilled,
+  StarTwoTone,
+  StarOutlined,
 } from "@ant-design/icons";
 import "./ProductDetail.css";
-// import { useCategories } from "../hook/useCategories";
 import type { Product } from "../../../types";
 import useUserStore from "../../../store/useUserStore";
-import useCartStore from "../../../store/useCartStore";
-// import { useCategoryStore, useProductStore } from "../../../store";
 import { useProductById } from "../hook/useProductById";
+import { useCategories } from "../hook/useCategories";
+import ViewedProducts from "./ViewedProducts";
+import Feedback from "../../feedback/components/Feedback";
+import { useCart } from "../../cart/hook";
+import useAddCart from "../../cart/hook/useAddCart";
+import ImageWithFallback from "../../../components/img/ImageWithFallback";
 
 const { Title } = Typography;
 
 const ProductDetail: React.FC = () => {
-  // Lấy id sản phẩm từ route
   const { id } = useParams<{ id: string }>();
-
-  // Lấy danh sách sản phẩm
-  // const setProduct = useProductStore((s) => s.setProducts);
-
-  // Lấy danh sách categories để truyền cho ViewProductByType
-  // const { data: categories } = useCategories();
-  // const setCategories = useCategoryStore((cat) => cat.setCategories);
-
   const [number, setNumber] = useState(1);
-  // const [recentProducts, setRecentProducts] = useState<Product[]>([]);
-
- 
-
-   const navigate = useNavigate();
-
-    const isLoggedIn = useUserStore((state) => state.isLoggedIn);
-    const addToCart = useCartStore((state) => state.addToCart);
-const { data: product, isLoading, error } = useProductById(id);
-
-    
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Không tìm thấy sản phẩm!</div>;
+  const [recentProducts, setRecentProducts] = useState<Product[]>([]);
+  const navigate = useNavigate();
+  const { data: categories } = useCategories();
+  const { data: product, isLoading, error } = useProductById(id);
+  const { refetchCart } = useCart(); // lấy lại cart
+  const { handleAddCart } = useAddCart(refetchCart);
+  const userId = useUserStore((state) => state.user?.id);
 
 
-if (!product) {
-  console.warn("Không tìm thấy sản phẩm có id =", id);
-  return <div>Không tìm thấy sản phẩm!</div>;
-}
-  if (!product) {
-  console.error("Không tìm thấy sản phẩm với id:", id);
-  return <div>Không tìm thấy sản phẩm!</div>;
-}
 
-  
+  // Lưu sản phẩm đã xem vào localStorage
+  useEffect(() => {
+    if (product) {
+      const stored = localStorage.getItem("recentlyViewed");
+      let viewed: Product[] = stored ? JSON.parse(stored) : [];
 
-  //Nút thêm giỏ hàng
-    const handleAddToCart = (product: Product) => {
-    if (!isLoggedIn) {
-      navigate('/login');
-      return;
-    }
+      // Xoá sản phẩm nếu đã tồn tại để không bị trùng
+      viewed = viewed.filter((p) => p.id !== product.id);
 
-    addToCart({
+      // Thêm mới vào đầu
+     viewed.unshift({
       id: product.id,
       name: product.name,
-      code: product.code,
       price: product.price,
-      quantity: product.quantity ?? 1,
-      image: product.imageUrl,
-    });
-
-    toast.success('Thêm vào giỏ hàng thành công!');
-  };
+      imageUrl: product.imageUrl,
+      code: product.code,
+    } as Product);
 
 
+      // Giới hạn 5 sản phẩm gần nhất
+      if (viewed.length > 5) viewed = viewed.slice(0, 5);
+
+      localStorage.setItem("recentlyViewed", JSON.stringify(viewed));
+      setRecentProducts(viewed); 
+    }
+  }, [product]);
+
+  const renderStars = (rating: number) => {
+        const stars = [];
+
+        for (let i = 1; i <= 5; i++) {
+          if (i <= rating) {
+            stars.push(<StarFilled key={i} className="text-[#fadb14]!" />);
+          } else if (i - rating < 1) {
+            stars.push(<StarTwoTone twoToneColor="#fadb14" key={i} />);
+          } else {
+            stars.push(<StarOutlined key={i} className="text-[#fadb14]!" />);
+          }
+        }
+
+        return stars;
+      };
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error || !product) return <div>Không tìm thấy sản phẩm!</div>;
 
   return (
     <div className="max-w-[1400px] mx-auto">
       <section className="flex gap-4 py-[20px]">
-        <Link style={{ color: "black", fontWeight: "bold" }} to={"/"}>
+        <Link className="link" to={"/"}>
           TRANG CHỦ
         </Link>
-        <p>/</p>
-        <p className="font-bold">CHI TIẾT SẢN PHẨM</p>
+        <p className="section-text">/</p>
+        <p className="font-bold section-text">CHI TIẾT SẢN PHẨM</p>
       </section>
-      <Row
-        gutter={[48, 48]}
-        align="middle"
-        className="rounded-xl shadow p-4 relative overflow-hidden bg-white max-w-[1400px] m-0!">
-        <Col xs={24} md={8} lg={8}>
-          <Card
-            style={{ padding: "10px", justifyContent: "center" }}
-            cover={
-              <div style={{ display: "flex", justifyContent: "center" }}>
-                <img
-                  src={product.imageUrl}
-                  alt={product.name}
-                  style={{ objectFit: "cover", height: 350, width: 300 }}
-                />
-              </div>
-            }
-          />
-        </Col>
-        <Col xs={24} md={9} lg={9}>
-          <div>
-            <Title level={3}>{product.name}</Title>
-            <span style={{ color: "#8b8681" }}>Mã SP: {product.code}</span>
-            <Title level={4}>
-              {product.price.toLocaleString()} VNĐ
 
-            </Title>
-            <div
+      <Row
+        gutter={[24, 24]}
+        align="middle"
+        className="rounded-xl shadow p-4 bg-white max-w-[1400px] m-0!"
+      >
+        <Col xs={24} md={8}>
+          <div className="flex justify-center">
+            <ImageWithFallback 
+              src={product.imageUrl}
+              alt={product.name}
               style={{
-                display: "flex",
-                gap: "16px",
-                marginTop: "20px",
-                fontSize: "15px",
-              }}>
-              <p style={{ color: "#8b8681" }}>Số lượng</p>
-              <Button
-                onClick={() => setNumber((n) => Math.max(1, n - 1))}
-                disabled={number === 1}>
-                -
-              </Button>
-              <p>{number}</p>
-              <Button onClick={() => setNumber((n) => n + 1)}>+</Button>
-            </div>
+                objectFit: "cover",
+                height: "auto",
+                maxHeight: 350,
+                width: "100%",
+                borderRadius: 12,
+              }}
+            />
           </div>
-          <Row gutter={[32, 32]} align="middle" style={{ marginTop: "20px" }}>
-            <Col xs={24} md={12} lg={10}>
-              <Button
-                style={{
-                  fontWeight: "bold",
-                  borderRadius: "10px",
-                  backgroundColor: "#22a085",
-                  color: "white",
-                }}
-                block
-                onClick={() => handleAddToCart({ ...product, quantity: number })}>
-                Thêm vào giỏ
-              </Button>
+        </Col>
+
+        <Col xs={24} md={9} lg={9} >
+          <Title level={3} className="!text-lg sm:!text-2xl">{product.name}</Title>
+
+          <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm text-[#8b8681]">
+            <span>Mã SP: {product.code}</span>
+            <div className="flex items-center">{renderStars(product.rating)}</div>
+            <span>({product.rating} đánh giá)</span>
+          </div>
+
+          <div className="h-px bg-gray-300 my-4 w-full" />
+
+          <p className="font-bold text-sm sm:text-base">Thông số sản phẩm</p>
+          <ul className="text-[#8b8681] text-xs sm:text-sm">
+            <li>{product.description}</li>
+          </ul>
+
+          <div className="h-[1px] bg-gray-300 mt-1 mb-4 w-full" />
+
+          {/* PRICE BOX */}
+         <div className="bg-[#f4f4f4] p-3 rounded-[5px] mt-2 w-full">
+          {product?.flashPrice ? (
+            <>
+              {product?.originalPrice && (
+                <div className="text-gray-500 text-[16px]">
+                  Giá tiền: <span className="line-through">{product.originalPrice.toLocaleString()} VNĐ</span>
+                </div>
+              )}
+
+              <Title level={4} className="!mb-0 !text-[#22a085]">
+                <span className=" text-xs sm:text-sm">Khuyến mại: </span>
+                {product.flashPrice.toLocaleString()} VNĐ
+              </Title>
+            </>
+          ) : (
+            <Title level={4} className="!mb-0 !text-[#22a085]">
+              <span className="text-[#8b8681] text-xs sm:text-sm">Giá tiền: </span>
+              {product?.price?.toLocaleString()} VNĐ
+            </Title>
+          )}
+        </div>
+
+          {/* QUANTITY */}
+          <div className="flex gap-4 mt-5 text-sm sm:text-base items-center">
+            <span className="text-[#8b8681]">Số lượng</span>
+            <Button onClick={() => setNumber((n) => Math.max(1, n - 1))} disabled={number === 1}>-</Button>
+            <span>{number}</span>
+            <Button onClick={() => setNumber((n) => n + 1)}>+</Button>
+          </div>
+
+          {/* ACTION BUTTONS */}
+          <Row gutter={[24, 24]} className="mt-5">
+            <Col xs={12} sm={12}>
+              <button
+                className="w-full font-bold rounded-md bg-[#22a085] text-white py-3 text-base sm:text-lg cursor-pointer"
+                onClick={() => handleAddCart(userId!, product.id, 1)}
+              >
+                THÊM VÀO GIỎ
+              </button>
             </Col>
-            <Col xs={24} md={12} lg={10}>
-              <Button
-                style={{
-                  fontWeight: "bold",
-                  borderRadius: "10px",
-                  backgroundColor: "red",
-                  color: "white",
+            <Col xs={12} sm={12}>
+              <button
+                className="w-full font-bold rounded-md bg-[#ff5c00] text-white py-3 text-base sm:text-lg cursor-pointer"
+                onClick={() => {
+                  handleAddCart(userId!, product.id, number);
+                  navigate("/cart");
                 }}
-                type="primary"
-                block
-                //onClick={handleBuyNow}
-                >
-                Mua Ngay
-              </Button>
+              >
+                MUA NGAY
+              </button>
             </Col>
           </Row>
         </Col>
-        <Col xs={24} md={7} lg={7}>
-          <Card
-            className="policy-card"
-            title={
-              <div className="policy-card-title">CHÍNH SÁCH MUA HÀNG</div>
-            }>
-            <div className="static-items">
-              <div className="policy-list">
-                <p className="item">
-                  <i className="icon">
-                    <CreditCardOutlined />
-                  </i>
-                  <span>Thanh toán thuận tiện</span>
-                </p>
-                <p className="item ">
-                  <i className="icon">
-                    <CheckSquareOutlined />
-                  </i>
-                  <span>Sản phẩm 100% chính hãng</span>
-                </p>
-                <p className="item ">
-                  <i className="icon">
-                    <InboxOutlined />
-                  </i>
-                  <span>Bảo hành nhanh chóng</span>
-                </p>
-                <p className="item ">
-                  <i className="icon">
-                    <TruckOutlined />
-                  </i>
-                  <span>Bảo hành nhanh chóng</span>
-                </p>
-              </div>
+
+        <Col xs={24} md={7} order={3}>
+        <div className="space-y-4 md:gap-3 md:items-stretch">
+          <div className="policy-card flex-1 h-full">
+            <div className="policy-card-title">CHÍNH SÁCH MUA HÀNG</div>
+            <div className="policy-list">
+              <p className="policy-item">
+                <CreditCardOutlined className="icon" />
+                Thanh toán thuận tiện
+              </p>
+              <p className="policy-item">
+                <CheckSquareOutlined className="icon" />
+                Sản phẩm 100% chính hãng
+              </p>
+              <p className="policy-item">
+                <InboxOutlined className="icon" />
+                Bảo hành nhanh chóng
+              </p>
+              <p className="policy-item">
+                <TruckOutlined className="icon" />
+                Giao hàng toàn quốc
+              </p>
             </div>
-          </Card>
-          <Card
-            className="policy-card"
-            title={<div className="policy-card-title">HOTLINE HỖ TRỢ</div>}>
-            <div className="static-items">
-              <div>
-                <a href="tel:094.359.2222" className="item ">
-                  <i className="icon">
-                    <PhoneOutlined />
-                  </i>
-                  <span>Hotline CSKH: 0349.296.461</span>
-                </a>
-                <a href="tel:094.359.2222" className="item">
-                  <i className="icon">
-                    <PhoneOutlined />
-                  </i>
-                  <span>Tư vấn khách hàng: 0349.296.461</span>
-                </a>
-              </div>
+          </div>
+
+          <div className="policy-card flex-1 h-full">
+            <div className="policy-card-title">HOTLINE HỖ TRỢ</div>
+            <div className="policy-list h-[152px]">
+              <a href="tel:0349296461" className="policy-item">
+                <PhoneOutlined className="icon" />
+                Hotline CSKH: 0349.296.461
+              </a>
+              <a href="tel:0349296461" className="policy-item">
+                <PhoneOutlined className="icon" />
+                Tư vấn mua hàng: 0349.296.461
+              </a>
             </div>
-          </Card>
-        </Col>
+          </div>
+        </div>
+      </Col>
       </Row>
-      {/* Sản phẩm đã xem */}
-      {/* {recentProducts.length > 0 && (
+      <Feedback/>
+      {/*  Hiển thị sản phẩm đã xem */}
+      {recentProducts.length > 0 && (
         <div className="mt-5 mb-5">
-          <ViewProductByType
-            products={recentProducts}
+          <ViewedProducts
+            products={recentProducts.filter((p) => p.id !== product.id)} 
             categories={categories}
-            title="Sản phẩm đã xem"
+            title="SẢN PHẨM ĐÃ XEM"
           />
         </div>
-      )} */}
-
-      {/* <section className="max-w-[1400px] mx-auto my-5">
-        <Feedback />
-      </section> */}
+      )}
     </div>
   );
 };

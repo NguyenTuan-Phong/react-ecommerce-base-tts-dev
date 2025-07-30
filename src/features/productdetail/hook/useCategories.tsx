@@ -6,9 +6,12 @@ export const useCategories = () => {
   return useQuery({
     queryKey: ['categories'],
     queryFn: async () => {
-      const categories = await fetchData('/category/getAllCategories?page=0&size=10&sortBy=id&sortDirection=asc');
+      const categories = await fetchData('/category/getAllCategories');
       useCategoryStore.getState().setCategories(categories);
       return categories;
     },
+    retry: false,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
 };

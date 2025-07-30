@@ -4,14 +4,20 @@ import { persist } from "zustand/middleware";
 
 interface CartItem {
   id: number;
-  code: string;
-  name: string;
-  price: number;
   quantity: number;
-  image?: string;
-  productCode?: string;
-  warranty?: string;
+  product: {
+    id: number;
+    code: string;
+    name: string;
+    price: number;
+    flashPrice?: number;
+    imageUrl?: string;
+    originalPrice?: number;
+    isInFlashSale?: boolean;
+  };
 }
+
+
 
 interface CartStore {
   cartItems: CartItem[];
