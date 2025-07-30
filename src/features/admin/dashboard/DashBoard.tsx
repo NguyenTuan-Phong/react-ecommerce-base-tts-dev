@@ -5,7 +5,6 @@ import {
 } from "@ant-design/icons"
 import { LineChart } from './components/Chart.tsx';
 import { BarChart } from './components/BarChart.tsx';
-
 const DashBoard = () => {
     return(
         <div className="flex flex-col gap-5 flex-1 overflow-y-auto h-full">
