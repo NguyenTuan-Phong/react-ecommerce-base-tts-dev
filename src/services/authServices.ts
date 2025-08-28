@@ -8,12 +8,13 @@ export interface ValueFormRegister {
   gender: number;
   role: number;
 }
-export const loginUser = async ({ email, password }: { email: string; password: string }) => {
+export const loginUser = async ({ email, password,fcmToken }: { email: string; password: string;fcmToken?:string }) => {
   return await post({
     url: API_PATHS.AUTH.login,
     data: {
       email,
       password,
+      fcmToken
     },
     config: {
       headers: {

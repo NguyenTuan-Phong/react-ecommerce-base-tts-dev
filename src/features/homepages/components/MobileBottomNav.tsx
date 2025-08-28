@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import {
   EnterOutlined,
   HomeOutlined,
-  PhoneOutlined,
+  QrcodeOutlined,
   UserSwitchOutlined,
 } from "@ant-design/icons";
 import LeftMenu from "./LeftMenu";
@@ -42,7 +42,7 @@ const MobileBottomNav = () => {
       to: "#",
       icon: (
         <svg
-          className="w-6 h-6 mb-1"
+          className="w-6 h-5"
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
@@ -58,9 +58,9 @@ const MobileBottomNav = () => {
       action: () => setShowCategories(!showCategories), 
     },
     {
-      label: "Hotline",
+      label: "Tìm kiếm",
       to: "/hotline",
-      icon: <PhoneOutlined className="text-xl mb-1" />,
+      icon: <QrcodeOutlined className="text-xl mb-1"/>,
       action: () => {
         window.location.href = "/hotline";
       },

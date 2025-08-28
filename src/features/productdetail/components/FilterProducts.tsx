@@ -44,7 +44,7 @@ const ProductFilterPage = ({
           const isSelected = 
             minPrice === range.min && maxPrice === range.max;
 
-          if (minPrice && maxPrice && !isSelected) return null;
+          // if (minPrice && maxPrice && !isSelected) return null;
 
           return (
             <Checkbox
@@ -72,7 +72,7 @@ const ProductFilterPage = ({
             {ResponseGetPublisher?.data?.content?.map((pub) => {
               const isChecked = selectedPublisher === pub.id;
 
-              if (selectedPublisher && !isChecked) return null;
+              // if (selectedPublisher && !isChecked) return null;
 
               return (
                 <Checkbox

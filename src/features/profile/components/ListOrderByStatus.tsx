@@ -12,7 +12,9 @@ const ListOrderByStatus = () => {
     const [page, setPage] = useState(0)
     const size = 5
     const { statusCode } = useParams();
-    const status = Number(statusCode);    
+    const status = Number(statusCode);
+    const [showAll, setShowAll] = useState(false);
+    const [showOrderId, setShowOrderId] = useState<string | null>(null);    
     
     const {
         isPendingGetOrderByUserId,
@@ -65,6 +67,14 @@ const ListOrderByStatus = () => {
         }
         return 'border-gray-300';
     };
+    const handleShowMore = (code: string) => {
+        setShowOrderId(code)
+        setShowAll(true)
+    }
+
+    const handleShowLess = () => {
+        setShowAll(false)
+    }
     
     return(
         <>
@@ -124,33 +134,57 @@ const ListOrderByStatus = () => {
 
                                             <div className="flex flex-col sm:flex-row pt-4 gap-4">
                                             {/* Danh sách sản phẩm */}
-                                            <div
-                                                className="flex flex-col flex-1 gap-2 cursor-pointer"
-                                                onClick={() => handleViewHistoryStatusOrder(item.id, item.code)}
-                                            >
-                                                {item.items.map((i) => (
-                                                <div key={i.productCode} className="flex gap-2">
-                                                    <section>
-                                                    <img className="w-[80px] h-[80px] object-cover" src="/images/default.png" alt="LB" />
-                                                    </section>
-                                                    <section className="flex-1">
-                                                    <div className="flex flex-col gap-1 sm:gap-3">
-                                                        <b>{i.productName}</b>
-                                                        <p className="text-sm text-gray-700">Mã sản phẩm: {i.productCode}</p>
-                                                        <p className="text-sm text-gray-700">Số lượng: {i.quantity}</p>
+                                            <div className="flex-1">
+                                                <div
+                                                    className="flex flex-col flex-1 gap-2 cursor-pointer"
+                                                    onClick={() => handleViewHistoryStatusOrder(item.id, item.code)}
+                                                >
+                                                    {(showAll && showOrderId === item.code ? item.items : item.items.slice(0, 3)).map((i) => (
+                                                    <div key={i.productCode} className="flex gap-2">
+                                                        <section>
+                                                        <img className="w-[80px] h-[80px] object-cover" src="/images/default.png" alt="LB" />
+                                                        </section>
+                                                        <section className="flex-1">
+                                                        <div className="flex flex-col gap-1 sm:gap-3">
+                                                            <b>{i.productName}</b>
+                                                            <p className="text-sm text-gray-700">Mã sản phẩm: {i.productCode}</p>
+                                                            <p className="text-sm text-gray-700">Số lượng: {i.quantity}</p>
+                                                        </div>
+                                                        </section>
                                                     </div>
-                                                    </section>
+                                                    ))}
+                                                    
                                                 </div>
-                                                ))}
+                                                {item.items.length > 3 && (
+                                                    <div>
+                                                        {showAll && showOrderId === item.code ? (
+                                                        <button
+                                                            onClick={handleShowLess}
+                                                            className='text-blue-500 hover:underline text-sm cursor-pointer mt-5'
+                                                        >
+                                                            Thu gọn
+                                                        </button>
+                                                        ) : (
+                                                        <button
+                                                            onClick={() => handleShowMore(item.code)}
+                                                            className='text-blue-500 hover:underline text-sm cursor-pointer mt-5'
+                                                        >
+                                                            Xem thêm
+                                                        </button>
+                                                        )}
+                                                        
+                                                    </div>
+                                                    
+                                                )}
                                             </div>
 
                                             {/* Tổng tiền */}
                                             <section className="sm:w-[200px] w-full text-end flex flex-col justify-end items-end gap-1 sm:gap-2">
                                                 <span className="text-[12px] text-gray-500 line-through">
-                                                {(item.originMoney - item.originMoney * 10 / 100).toLocaleString()} VNĐ
+                                                    {(item.originMoney - item.originMoney * 10 / 100).toLocaleString()} VNĐ
                                                 </span>
                                                 <span className="text-[red] font-bold text-[18px]">
-                                                {item.originMoney.toLocaleString()} VNĐ
+                                                    {item.originMoney.toLocaleString()} VNĐ
                                                 </span>
                                             </section>
                                             </div>
@@ -165,9 +199,9 @@ const ListOrderByStatus = () => {
                                                 <b className="content-end">Thành tiền: </b>
                                                 <b className="text-[20px]">{item.totalMoney.toLocaleString()} VNĐ</b>
                                             </div>
-                                            <div className="flex justify-end">
+                                            {/* <div className="flex justify-end">
                                                 <button className="bg-[#ee4d2d] text-[white] px-7 py-3 rounded-[3px] hover:cursor-pointer">Mua lại</button>
-                                            </div>
+                                            </div> */}
                                         </section>
                                     </div>
                                 </div>
@@ -176,13 +210,17 @@ const ListOrderByStatus = () => {
                             
                         </div>
                     )}
-                    {data.length !== 0 &&
+                    {data.length > 5 &&
                         <div className="mt-5">
                             <Pagination
                                 align="center"
                                 current={page + 1}
                                 pageSize={size}
-                                onChange={(pageNumber) => setPage(pageNumber - 1)}
+                                onChange={(pageNumber) => {
+                                        setPage(pageNumber - 1)
+                                        window.scrollTo({ top: 0, behavior: "smooth" });
+                                    }
+                                }
                                 total={ResponseGetOrderByUserId?.data.currentTotalElementsCount}
                             />
                         </div>

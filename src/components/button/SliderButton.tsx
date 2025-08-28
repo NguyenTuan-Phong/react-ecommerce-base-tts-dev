@@ -19,7 +19,7 @@ const SliderButton: React.FC<SliderButtonProps> = ({ direction, onClick, show,cl
     <button
       onClick={onClick}
       className={`w-5 h-10 bg-[#bbb9b9] flex items-center justify-center
-        absolute top-1/2 ${positionClass} -translate-y-1/2 z-20 hover:bg-[#29A07E] transition-all ${className}`}
+        absolute top-1/2 ${positionClass} -translate-y-1/2 z-20 hover:bg-[#fa7833] transition-all ${className}`}
     >
       <Icon className="text-white text-xs" />
     </button>

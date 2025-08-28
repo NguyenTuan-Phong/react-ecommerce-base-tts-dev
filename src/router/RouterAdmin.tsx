@@ -1,111 +1,82 @@
 import { Navigate } from "react-router-dom";
-import DashBoard from "../features/admin/dashboard/DashBoard";
-import Profile from "../features/profile/components/Profile";
-import InfoUser from "../features/profile/components/InfoUser";
-import ChangePassword from "../features/profile/components/ChangePassword";
-import LoginPage from "../features/auth/components/LoginPage";
-import RegisterPage from "../features/auth/components/RegisterPage";
-import LayoutAdmin from "../components/layout/LayoutAdmin";
-// import HomePage from "../features/homepages/components/HomePage/HomePages";
+// Pages
+import DashBoard from "../features/admin/dashboard/components/DashBoard";
 import ProductAdmin from "../features/admin/product/component/ProductAdmin";
 import AddProductAdmin from "../features/admin/product/component/AddProductAdmin";
-import ManagementVoucher from "../features/admin/voucher/components/ManagerVoucher";
 import ProductAdminDetail from "../features/admin/product/component/ProductAdminDetail";
+import ManagementVoucher from "../features/admin/voucher/components/ManagerVoucher";
 import ManagementCategory from "../features/admin/category/components/ManagementCategory";
 import ManagementOrder from "../features/admin/order/components/ManagementOrder";
 import ViewDetailOrder from "../features/admin/order/components/ViewDetailOrder";
 import PublisherAdmin from "../features/admin/publisher/component/PublisherAdmin";
 import ManagementFlashSale from "../features/admin/flashsale/components/ManagementFlashSale";
 import ViewDetailFlashSale from "../features/admin/flashsale/components/ViewDetailFlashSale";
-import CreateFlashSale from "../features/admin/flashsale/components/CreateFlashSale";
-import UpdateFlashSale from "../features/admin/flashsale/components/UpdateFlashSale";
+import CreateFlashSaleV2 from "../features/admin/flashsale/components/CreateFlashSaleV2";
+import UpdateFlashSaleV2 from "../features/admin/flashsale/components/UpdateFlashSaleV2";
+import AdminNotification from "../features/admin/notification/component/AdminNotification";
+import AddNotification from "../features/admin/notification/component/AddNotification";
+import ManagementCombo from "../features/admin/combo/components/ManagementCombo";
+import ViewDetailCombo from "../features/admin/combo/components/ViewDetailCombo";
+import CreateComboProduct from "../features/admin/combo/components/CreateComboProduct";
+import UpdateComboProduct from "../features/admin/combo/components/UpdateComboProduct";
+import Profile from "../features/profile/components/Profile";
+import InfoUser from "../features/profile/components/InfoUser";
+import ChangePassword from "../features/profile/components/ChangePassword";
+import RegisterPage from "../features/auth/components/RegisterPage";
+import AuthLayoutAdmin from "../components/layout/AuthLayoutAdmin";
+import MainLayoutAdmin from "../components/layout/LayoutAdmin";
+import LoginAdmin from "../features/auth/components/LoginAdmin";
+import ManagementArticle from "../features/admin/article/components/ManagementArticle.tsx";
+import CreateArticle from "../features/admin/article/components/CreateArticle.tsx";
+import EditArticle from "../features/admin/article/components/EditArticle.tsx";
+import ArticleDetailAdmin from "../features/admin/article/components/ArticleDetailAdmin.tsx";
+
 
 export const routerAdmin = [
-    {path : '*', element : <Navigate to="/admin" />},
-    // {
-    //         path : '/',
-    //         element : <HomePage />
-    // },
     {
-        path: '/login',
-        element : <LoginPage />
-    },
-    {
-        path: '/admin',
-        element: <LayoutAdmin />,
+        element: <AuthLayoutAdmin />,
         children: [
-            {
-                index: true,
-                element: <DashBoard />
-            },
-            {
-                path: 'prod-management',
-                element: <ProductAdmin />
-            },
-            {
-                path: 'add-product',
-                element: <AddProductAdmin />
-            },
-            {
-                path: 'management-voucher',
-                element: <ManagementVoucher />
-            },
-            {
-                path: 'prod-detail-admin/:id',
-                element: <ProductAdminDetail />
-            },
-            {
-                path: 'management-category',
-                element: <ManagementCategory />
-            },
-            {
-                path: 'management-order',
-                element: <ManagementOrder />
-            },
-            {
-                path: 'view-detail-order',
-                element: <ViewDetailOrder />
-            },
-            {
-                path: 'publisher-management',
-                element: <PublisherAdmin />
-            },
-            {
-                path: 'management-flashsale',
-                element: <ManagementFlashSale />
-            },
-            {
-                path: 'view-detail-flashsale/:id',
-                element: <ViewDetailFlashSale />
-            },
-            {
-                path: 'create-flashsale',
-                element: <CreateFlashSale />
-            },
-            {
-                path: 'update-flashsale',
-                element: <UpdateFlashSale />
-            }
-        ]
+            { path: "/admin/login", element: <LoginAdmin /> },
+        ],
     },
+
     {
-        path: '/profile',
-        element: <Profile />,
+        element: <MainLayoutAdmin />,
         children: [
+            { path: "/admin", element: <DashBoard /> },
+            { path: "admin/prod-management", element: <ProductAdmin /> },
+            { path: "admin/add-product", element: <AddProductAdmin /> },
+            { path: "admin/prod-detail-admin/:id", element: <ProductAdminDetail /> },
+            { path: "admin/management-voucher", element: <ManagementVoucher /> },
+            { path: "admin/management-category", element: <ManagementCategory /> },
+            { path: "admin/management-order", element: <ManagementOrder /> },
+            { path: "admin/view-detail-order", element: <ViewDetailOrder /> },
+            { path: "admin/publisher-management", element: <PublisherAdmin /> },
+            { path: "admin/management-flashsale", element: <ManagementFlashSale /> },
+            { path: "admin/view-detail-flashsale/:id", element: <ViewDetailFlashSale /> },
+            { path: "admin/create-flashsale", element: <CreateFlashSaleV2 /> },
+            { path: "admin/update-flashsale", element: <UpdateFlashSaleV2 /> },
+            { path: "admin/management-notification", element: <AdminNotification /> },
+            { path: "admin/add-notification", element: <AddNotification /> },
+            { path: "admin/management-combo", element: <ManagementCombo /> },
+            { path: "admin/view-detail-combo/:id", element: <ViewDetailCombo /> },
+            { path: "admin/create-combo-product", element: <CreateComboProduct /> },
+            { path: "admin/update-combo-product", element: <UpdateComboProduct /> },
+            { path: "admin/management-article", element: <ManagementArticle /> },
+            { path: "admin/create-article", element: <CreateArticle /> },
+            { path: "admin/edit-article/:id", element: <EditArticle /> },
+            { path: "admin/article/:id", element: <ArticleDetailAdmin /> },
             {
-                path:'info-user',
-                element: <InfoUser />
+                path: "/profile",
+                element: <Profile />,
+                children: [
+                    { path: "info-user", element: <InfoUser /> },
+                    { path: "change-password", element: <ChangePassword /> },
+                ],
             },
-            {
-                path:'change-password',
-                element: <ChangePassword />
-            }
-        ]
+        ],
     },
-    
-    {
-        path: '/register',
-        element : <RegisterPage />
-    },
-    
-]
+
+    { path: "/register", element: <RegisterPage /> },
+    { path: "*", element: <Navigate to="/admin" /> },
+];

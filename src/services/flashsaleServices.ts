@@ -1,6 +1,23 @@
 import { get, post } from '../config/axios-config'
 import { API_PATHS } from "../constants/apiPath"
 import type { ResponseFlashSale, ResponseFlashSaleById } from '../types'
+interface product {
+    id: string,
+    name: string,
+    imageUrl: string,
+    price: number,
+    code: string,
+    quantity: number
+}
+
+interface ResponseDataCheckProductFlashSale {
+    data: {
+        currentTotalElementsCount: number
+        content:product[]
+    }
+}
+
+
 
 export const getAllFlashSale = async (
     page: number, 
@@ -61,5 +78,22 @@ export const updateFlashSale = async (data: FormCreateFlashSale) => {
     return await post({
         url: API_PATHS.FLASHSALE.updateFlashSale,
         data
+    })
+}
+
+export const getCheckProductFlashSale = async (
+    startTime: string,
+    endTime: string,
+    page : number,
+    size: number,
+):Promise<ResponseDataCheckProductFlashSale> => {
+    return await get({
+        url: API_PATHS.FLASHSALE.getCheckProductFlashSale,
+        params: {
+            startTime: startTime,
+            endTime: endTime,
+            page: page,
+            size: size
+        }
     })
 }

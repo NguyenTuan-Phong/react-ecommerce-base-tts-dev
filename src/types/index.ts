@@ -5,43 +5,43 @@ export interface ApiResponse<T> {
 }
 
 export interface FormSendOTPForget {
-  email: string
+  email: string;
 }
 
 export interface FormForget {
-  email: string,
-  otp: number,
-  newPassword: string,
-  confirmPassword: string
+  email: string;
+  otp: number;
+  newPassword: string;
+  confirmPassword: string;
 }
 
-export interface LoginForm  {
-    email: string,
-    password: string
+export interface LoginForm {
+  email: string;
+  password: string;
+  fcmToken: string | null;
 }
 
 export interface Category {
   type: number | Category | null | undefined;
-  id: number;
+  id: string;
   name: string;
   description: string;
-  categoryItems: { id: number; name: string; img:string }[];
-
+  categoryItems: { id: number; name: string; img: string }[];
 }
 
-
-export interface FormLogin  {
-  email: string,
-  password: string
+export interface FormLogin {
+  email: string;
+  password: string;
+  fcmToken?: string | null;
 }
 
-export interface FormRegister  {
-  email: string,
-  fullName: string,
-  phoneNumber: string,
-  gender: number,
-  password: string,
-  role: number
+export interface FormRegister {
+  email: string;
+  fullName: string;
+  phoneNumber: string;
+  gender: number;
+  password: string;
+  role: number;
 }
 
 export interface LoginResponseData {
@@ -56,56 +56,55 @@ export interface ApiResponse<T> {
 }
 
 export interface FormForget {
-  email: string
+  email: string;
 }
 
-export interface LoginForm  {
-    email: string,
-    password: string
+export interface LoginForm {
+  email: string;
+  password: string;
 }
 
-
-
-export type Product =  {
-        id: number,
-        name: string,
-        imageUrl: string,
-        price: number,
-        code:string,
-        rating:number,
-        color: string|null,
-        size:number|null,
-        quantity: number,
-        originalPrice?:number,
-        flashPrice?:number,
-        isActive: 0|1,
-        publisher: {
-            id: number,
-            name:string,
-            isActive: 0|1,
-        },
-        categories: [
-            {
-                 id: number,
-                name:string,
-                description:string,
-                isActive: 0|1,
-            }
-        ],
-        feedbackStats: string|null,
-    };
-export interface FormLogin  {
-  email: string,
-  password: string
+export type Product = {
+  id: string;
+  name: string;
+  imageUrl: string;
+  price: number;
+  code: string;
+  rating: number;
+  color: string | null;
+  size: number | null;
+  quantity: number;
+  originalPrice?: number;
+  flashPrice?: number;
+  isActive: 0 | 1;
+  publisher: {
+    id: number;
+    name: string;
+    isActive: 0 | 1;
+  };
+  categories: [
+    {
+      id: number;
+      name: string;
+      description: string;
+      isActive: 0 | 1;
+    },
+  ];
+  feedbackStats: string | null;
+  availableQuantity: number;
+};
+export interface FormLogin {
+  email: string;
+  password: string;
 }
 
-export interface FormRegister  {
-  email: string,
-  fullName: string,
-  phoneNumber: string,
-  gender: number,
-  password: string,
-  role: number
+export interface FormRegister {
+  email: string;
+  fullName: string;
+  phoneNumber: string;
+  gender: number;
+  password: string;
+  role: number;
 }
 
 export interface LoginResponseData {
@@ -115,15 +114,15 @@ export interface LoginResponseData {
 }
 
 export interface DataProduct {
-    name: string,
-    price: number,
-    code: string,
-    color: string,
-    size: string,
-    productId: string,
-    imageUrl: string,
-    flashPrice?:number,
-    originalPrice?:number,
+  name: string;
+  price: number;
+  code: string;
+  color: string;
+  size: string;
+  id: string;
+  imageUrl: string;
+  flashPrice?: number;
+  originalPrice?: number;
 }
 export interface CartItem {
   id: number;
@@ -131,14 +130,36 @@ export interface CartItem {
   name: string;
   product: DataProduct;
 }
-export interface ResponsiveDataCartItems {
-    data: {
-        id: string,
-        cartItems : CartItem[],
-    } 
+export interface IComboItemsResp {
+  id?: number | string;
+  quantity: number;
+  combo: {
+    id: string;
+    nameCombo: string;
+    description: string;
+    imageUrl: string;
+    price: number;
+    originalTotalPrice: null;
+    discountAmount: null;
+    discountPercentage: null;
+    comboProducts: null;
+    isActive: null;
+    quantity: number;
+    soldQuantity: number;
+    remainingQuantity: number;
+    code: string;
+  };
 }
 
- export interface Publisher {
+export interface ResponsiveDataCartItems {
+  data: {
+    id: string;
+    cartItems: CartItem[];
+    comboItems?: IComboItemsResp[];
+  };
+}
+
+export interface Publisher {
   id: number;
   name: string;
 }
@@ -156,19 +177,19 @@ export interface FeedbackPayload {
 }
 
 export interface itemHistoryStatusOrder {
-  id: string,
-  note: string,
-  createdAt: string,
-  products: itemsProduct[]
+  id: string;
+  note: string;
+  createdAt: string;
+  products: itemsProduct[];
 }
 
 export interface ResponseGetHistoryStatusOrder {
-  data: itemHistoryStatusOrder[]
+  data: itemHistoryStatusOrder[];
 }
 
 export interface itemsProduct {
-  productId: string,
-  isReviewed: boolean
+  productId: string;
+  isReviewed: boolean;
 }
 
 export interface ResponseFlashSale {
@@ -182,11 +203,10 @@ export interface ResponseFlashSale {
     hasPrevious: boolean;
     hasNext: boolean;
   };
- 
 }
 
 export interface FlashSale {
-  productId: string;
+  id: string;
   name: string;
   startTime: string;
   endTime: string;
@@ -209,68 +229,90 @@ export interface FlashSaleProduct {
   categories: Category[];
 }
 
-
-
 export interface contentFlashSale {
-  id: string,
-  name: string,
-  startTime: string,
-  endTime: string,
-  active: boolean
+  id: string;
+  name: string;
+  startTime: string;
+  endTime: string;
+  active: boolean;
 }
-
 
 // Category
 export interface categoryItems {
-  id: string,
-  name: string
+  id: string;
+  name: string;
 }
 
 export interface categories {
-  id: string,
-  name: string,
-  categoryItems: categoryItems[]
+  id: string;
+  name: string;
+  categoryItems: categoryItems[];
 }
 
-// Piblisher 
+// Piblisher
 export interface publisher {
-  id: string,
-  name: string
+  id: string;
+  name: string;
 }
 
 export interface products {
-  productId: string,
-  name: string,
-  description: string,
-  code: string,
-  originalPrice: number,
-  imageUrl: string,
-  flashPrice: number,
-  availableQuantity: number,
-  soldQuantity: number,
-  publisher: publisher,
-  categories: categories[]
-  active: boolean
+  productId: string;
+  name: string;
+  description: string;
+  code: string;
+  originalPrice: number;
+  imageUrl: string;
+  flashPrice: number;
+  availableQuantity: number;
+  soldQuantity: number;
+  publisher: publisher;
+  categories: categories[];
+  active: boolean;
 }
 
 export interface ResponseFlashSaleById {
   data: {
-    id: string,
-    name: string,
-    startTime: string,
-    endTime: string,
-    active: boolean,
-    products: products[],
-    createdBy: string
-  }
+    id: string;
+    name: string;
+    startTime: string;
+    endTime: string;
+    active: boolean;
+    products: products[];
+    createdBy: string;
+  };
 }
 
-export interface flashSale{
-  id: string,
-  name: string,
-  startTime: string,
-  endTime: string,
-  active: boolean,
-  products: products[],
-  createdBy: string
+export interface flashSale {
+  id: string;
+  name: string;
+  startTime: string;
+  endTime: string;
+  active: boolean;
+  products: products[];
+  createdBy: string;
+}
+
+export interface Message {
+  id: number;
+  text: string;
+  sender: 'me' | 'other';
+  avatar: string;
+}
+
+export interface ChatProps {
+  userId: string;
+  onClick?: () => void;
+}
+export interface Notification {
+  id: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+}
+
+export interface ResponseNotification {
+  data: {
+    content: Notification[];
+    currentTotalElementsCount: number;
+  };
 }

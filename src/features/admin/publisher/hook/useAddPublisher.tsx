@@ -5,8 +5,6 @@ import { createPublisher } from "../../../../services";
 export const useCreatePublisher = () => {
   const queryClient = useQueryClient();
   const token = localStorage.getItem("token");
-  console.log("Token:", token); 
-
 
   const {
     mutate: createPublisherMutate,

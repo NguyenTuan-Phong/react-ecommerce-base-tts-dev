@@ -14,7 +14,8 @@ export const createOrder = async (id: string, value: DataCart) => {
     note,
     voucherCode,
     type,
-    items
+    items,
+    comboItems
   } = value;
 
   return await post({
@@ -29,19 +30,33 @@ export const createOrder = async (id: string, value: DataCart) => {
       recipientPhone,
       shippingAddress,
       province,
-      district,
+      district: district ?? "Hà Nội",
       ward: ward ?? "Hà Nội",
-      note : note ?? null,
+      note: note ?? null,
       voucherCode: voucherCode ?? null,
       type,
-      items: items.map((item) => ({
-        productId: item.productId || '',
-        quantity: item.quantity || 0,
-        price: item.price || 0,
-      })),
-    }
+      ...(items && items.length > 0
+        ? {
+            items: items.map(item => ({
+              productId: item.productId || "",
+              quantity: item.quantity || 0,
+              price: item.price || 0,
+            })),
+          }
+        : {}),
+      ...(comboItems && comboItems.length > 0
+        ? {
+            comboItems: comboItems.map(item => ({
+              comboId: item.comboId !== undefined ? item.comboId : "defaultComboId",
+              quantity: item.quantity || 0,
+              price: item.price || 0,
+            })),
+          }
+        : {}),
+        }
   });
 }
+
 
 export const getAllOrderByAdmin = async (
   page: number, 
@@ -71,17 +86,20 @@ export const getAllOrderByAdmin = async (
 export const updateStatusOrder = async (
   {
     orderId,
-    status
+    status,
+    userId
   } : {
     orderId: string,
-    status: number
+    status: number,
+    userId: string
   }
 ) => {
   return await post({
     url: API_PATHS.CART.updateStatusOrder,
     data: {
       orderId,
-      status
+      status,
+      userId
     }
   })
 }

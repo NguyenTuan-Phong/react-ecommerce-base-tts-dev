@@ -1,4 +1,3 @@
-
 export const API_PATHS = {
   AUTH: {
     login: '/auth/authenticate',
@@ -16,37 +15,37 @@ export const API_PATHS = {
     order: '/orders/create',
     add: '/cart/add',
     update: '/cart/update',
-    updateStatusOrder: '/orders/update-status'
+    updateStatusOrder: '/orders/update-status',
   },
   USER: {
     get: '/auth/getProfile',
     changePassword: '/auth/change-password',
-    getAllOrder : '/orders/getAllOrders',
+    getAllOrder: '/orders/getAllOrders',
     getOrderByStatus: '/orders/status',
     getHistoryStatusOrder: 'orders/history',
-    getOrderByUserId : '/orders/getOrderByUser'
+    getOrderByUserId: '/orders/getOrderByUser',
   },
   VOUCHER: {
     get: '/voucher/getAllVouchers',
     remove: '/voucher/delete',
     getDetail: '/voucher/getVoucherById',
     create: '/voucher/create',
-    update: '/voucher/update'
+    update: '/voucher/update',
   },
   PRODUCT: {
     getAllProduct: 'products/getAllProducts',
     searchProduct: 'products/search',
-    getProductByCategory : '/products/getByCategory',
+    getProductByCategory: '/products/getByCategory',
     getPublishers: '/publishers/getAllPublishers',
-    searchPublisher:'/publishers/search',
-    creatPublisher:'/publishers/create',
-    removePublisher:'/publishers/delete',
-    updatePublisher:'/publishers/update',
+    searchPublisher: '/publishers/search',
+    creatPublisher: '/publishers/create',
+    removePublisher: '/publishers/delete',
+    updatePublisher: '/publishers/update',
     getCategory: '/category/getAllCategories',
     getProductByCategoryItem: '/products/getByCategoryItem',
-    createProduct:'products/create',
-    removeProduct:'/products/delete',
-    updateProduct:'/products/update',
+    createProduct: 'products/create',
+    removeProduct: '/products/delete',
+    updateProduct: '/products/update',
     // getCategory:'/category/getAllCategories',
     getCategoryDetail: '/category/getById',
     getCategoryItemsDetail: '/categoryItem/getById',
@@ -54,22 +53,59 @@ export const API_PATHS = {
     createCategoryItems: '/categoryItem/create',
     removeCategory: '/category/delete',
     removeCategoryItems: '/categoryItem/delete',
-    updateCategory : '/category/update',
+    updateCategory: '/category/update',
     updateCategoryItems: '/categoryItem/update',
-    getAllFlashSale:'/flash-sales/getAll',
-    getFlashSaleDetail:'/flash-sales/getById'
+    getAllFlashSale: '/flash-sales/getAll',
+    getFlashSaleDetail: '/flash-sales/getById',
   },
   FEEDBACK: {
     getFeedbackByProductId: '/feedbacks/getFeedbacksByProductId',
     createFeedback: 'feedbacks/create',
     removeFeedback: '/feedbacks/delete',
-    updateFeedback: '/feedbacks/update'
+    updateFeedback: '/feedbacks/update',
   },
   FLASHSALE: {
     getAll: '/flash-sales/getAll',
     getFlashSaleById: '/flash-sales/getById',
     createFlashSale: '/flash-sales/create',
     deleteFlashSale: '/flash-sales/delete',
-    updateFlashSale: '/flash-sales/update'
-  }
+    updateFlashSale: '/flash-sales/update',
+    getCheckProductFlashSale: '/flash-sales/flash-sale/products/exclude-scheduled',
+  },
+  VNPAY: {
+    getCallBack: '/vnpay/callback',
+  },
+  SEARCH: {
+    searchProductByImage: '/image/search',
+  },
+  DASHBOARD: {
+    dashboardViewHistoryOrder: '/products/recent-orders',
+    dashboardProductTopSelling: '/products/top-selling',
+    dashboardRevenueSales: '/products/revenue-sales',
+  },
+  NOTIFICATION: {
+    createNotification: '/notifications/create',
+    getAllNotification: '/notifications/getAllNotifications',
+    getNotificationById: '/notifications/getNotificationById',
+    updateNotification: '/notifications/update',
+    deleteNotification: '/notifications/delete',
+    sendAll: '/notifications/send',
+  },
+  COMBO: {
+    getAllCombo: '/combos/getAll',
+    removeCombo: '/combos/delete',
+    getDetailCombo: '/combos/getById',
+    createCombo: '/combos/create',
+    updateCombo: '/combos/update'
+  },
+  COMPARE:{
+    compare: '/products/compare'
+  },
+  posts: {
+    getAll: "/post/getAll",
+    getById:"/post/getById",
+    create: "/post/create",
+    update: (id: number | string) => `/post/update/${id}`,
+    delete: (id: number | string) => `/post/delete/${id}`,
+  },
 };

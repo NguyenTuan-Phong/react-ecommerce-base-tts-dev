@@ -26,7 +26,6 @@ export const useRegister = () => {
       password: value.password,
       role: 1,
     };
-    console.log();
 
     await registerMutation(data);
   };

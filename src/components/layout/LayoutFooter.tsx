@@ -1,100 +1,151 @@
-import { 
-    EnvironmentOutlined,
-    MailOutlined,
-    SendOutlined,
-    PhoneOutlined
-} from '@ant-design/icons';
-import FooterContent from '../../features/news/components/FooterContent';
-import useUserStore from '../../store/useUserStore';
+import {
+  EnvironmentOutlined,
+  MailOutlined,
+  PhoneOutlined,
+  CustomerServiceOutlined,
+  FileProtectOutlined,
+  SendOutlined,
+} from "@ant-design/icons";
+import { Link } from "react-router-dom";
+import useUserStore from "../../store/useUserStore";
 
 const LayoutFooter = () => {
-    const role = useUserStore((state) => state.user?.role.name)
-    return (
-        <div className='flex flex-col gap-4 overflow-x-hidden'>
-            {role !== "ROLE_MANAGER" && <FooterContent /> }
+  const role = useUserStore((state) => state.user?.role.name);
 
-            <footer className='bg-[#f8f8f8] text-[15px]'>
-                <div className='bg-[#22a085] text-[#fff] px-[10px]'
-                >
-                    <div className="max-w-[1400px] mx-auto flex items-center justify-between flex-wrap">
-                        <div className="flex items-center gap-4 flex-[2] pr-5">
-                            <div className='flex gap-2 items-center'>
-                                <b className='text-[100px]'><MailOutlined/></b>
-                                <div>
-                                    <div className='font-bold text-[28px]'>NHẬN TIN KHUYẾN MÃI</div>
-                                    <div>Bạn vui lòng để lại Email để nhận thông tin khuyến mãi từ Lắc Đầu</div>
-                                </div>
-                                
-                            </div>
-                        </div>
-                        <form className="flex items-center bg-white rounded-[32px] p-2 w-[400px] flex-[2] mx-[10px] mb-2">
-                            <input
-                                type="email"
-                                placeholder="Nhập email đăng ký nhận tin khuyến mãi"
-                                className="border-none outline-none flex-1 px-4 py-3 rounded-[32px] text-base text-black"
-                            />
-                            <button type="submit" className="bg-[#22a085]! border-none rounded-full w-12 h-12 text-white cursor-pointer">
-                                <SendOutlined />
-                            </button>
-                        </form>
-                    </div>
-                </div>
-                <div className='bg-[white] px-2'>
-                    <div className={`${role === "ROLE_MANAGER" ? "" : "max-w-[1400px]"} mx-auto flex gap-8 py-4 flex-wrap`}>
-                        <div >
-                            <div className="font-bold text-[22px] mb-2">LẮC ĐẦU</div>
-                            <div className='gap-[5px] flex mb-2'>
-                                <p className='text-[green]!'><EnvironmentOutlined/></p> 66 Xã Đàn, Phường Phương Liên, Quận Đống Đa, Hà Nội
-                            </div>
-                            <div className='gap-[5px] flex mb-2'>
-                                <p className='text-[green]!'><PhoneOutlined /></p>0349296461
-                            </div>
-                            <div className='gap-[5px] flex mb-2'>
-                                <p className='text-[green]!'><MailOutlined/></p>lacdaushop@gmail.com
-                            </div>
-                        </div>
-                        <div>
-                            <div className="font-bold mb-2">HỖ TRỢ KHÁCH HÀNG</div>
-                            <ul className="p-0 m-0 list-none">
-                                <li>• Hướng dẫn mua hàng trực tuyến</li>
-                                <li>• Hướng dẫn thanh toán</li>
-                                <li>• Góp ý, Khiếu Nại</li>
-                            </ul>
-                            
-                        </div>
-                        <div>
-                            <div className='mb-2 font-bold'>CHÍNH SÁCH CHUNG</div>
-                            <ul className="p-0 m-0 list-none">
-                                <li>• Chính sách, quy định chung</li>
-                                <li>• Chính sách vận chuyển</li>
-                                <li>• Chính sách bảo hành</li>
-                                <li>• Chính sách đổi trả và hoàn tiền</li>
-                                <li>• Chính sách xử lý khiếu nại</li>
-                                <li>• Bảo mật thông tin khách hàng</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <div className='mb-2 font-bold'>FANPAGE FACEBOOK</div>
-                            <img src="/images/default.png" alt="LOGO" 
-                            className='w-[250px] h-[120px]'
-                            />
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <div className={`${role === "ROLE_MANAGER" ? "" : "max-w-[1400px]"} text-[13px] text-[#555] mx-auto py-4 px-2`}
+  const contactItems = [
+    {
+      icon: <EnvironmentOutlined />,
+      text: "Tầng 8 tòa nhà 3A, số 3 ngõ 82 Duy Tân, phường Dịch Vọng Hậu, quận Cầu Giấy, Hà Nội, Việt Nam",
+      href: "https://maps.app.goo.gl/8MScKhzeDhoi4Fje8",
+      target: "_blank",
+    },
+    {
+      icon: <PhoneOutlined />,
+      text: "09637600289",
+      href: "tel:09637600289",
+    },
+    {
+      icon: <MailOutlined />,
+      text: "contact@codec.com",
+      href: "mailto:contact@codec.com",
+    },
+  ];
 
-                    >
-                        Công ty trách nhiệm hữu hạn MAGITECH<br />
-                        Địa chỉ : Thôn Yên Ngưu, Xã Tam Hiệp, Huyện Thanh Trì, Thành phố Hà Nội, Việt Nam<br />
-                        Chủ sở hữu: Hoàng Vĩnh Phúc<br />
-                        Mã số thuế: 8714045794 do Chi cục Thuế Quận Thanh Xuân quản lý - Cấp ngày 07/10/2021<br />
-                        Giấy chứng nhận Đăng ký Kinh doanh số 0109583374 do Sở KHĐT Tp.Hà Nội cấp ngày 07/04/2021
-                    </div>
-                </div>
-            </footer>
+  return (
+    <footer className="bg-[#0D1117] text-gray-300 text-[15px]">
+
+      <div
+        className={`${
+          role === "ROLE_MANAGER" ? "" : "max-w-[1600px]"
+        } mx-auto grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-10 px-6 py-10`}
+      >
+
+        <div>
+          <div className="font-bold text-[22px] text-white mb-3">
+            <span className="text-orange-500">Codec</span>
+          </div>
+          <p className="text-gray-400 mb-4">
+            Nền tảng mua sắm trực tuyến hàng đầu Việt Nam với hàng triệu sản phẩm
+            chất lượng, giá cả hợp lý và dịch vụ tận tâm.
+          </p>
         </div>
-    );
+
+        <div>
+          <div className="flex items-center gap-2 font-bold text-lg text-orange-500 mb-3">
+            <CustomerServiceOutlined /> Hỗ trợ khách hàng
+          </div>
+          <ul className="space-y-2">
+            <li>
+              <Link to="/support-buy" className="hover:text-orange-500! transition!">
+                Trung tâm hỗ trợ 24/7
+              </Link>
+            </li>
+            <li>
+              <Link to="/payment-guide" className="hover:text-orange-500! transition!">
+                Hướng dẫn thanh toán
+              </Link>
+            </li>
+            <li>
+              <Link to="/feedback" className="hover:text-orange-500! transition!">
+                Góp ý, Khiếu Nại
+              </Link>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <div className="flex items-center gap-2 font-bold text-lg text-orange-500 mb-3">
+            <FileProtectOutlined /> Chính sách chung
+          </div>
+          <ul className="space-y-2 flex flex-col">
+            <Link to="regulation" className="hover:text-orange-500! transition-colors!">
+              Chính sách, quy định chung
+            </Link>
+            <Link to="shipping" className="hover:text-orange-500! transition!">
+              Chính sách vận chuyển
+            </Link>
+            <Link to="warranty" className="hover:text-orange-500! transition!">
+              Chính sách bảo hành
+            </Link>
+            <Link to="returns" className="hover:text-orange-500! transition!">
+              Chính sách đổi trả và hoàn tiền
+            </Link>
+            <Link to="privacy" className="hover:text-orange-500! transition!">
+              Chính sách xử lý khiếu nại
+            </Link>
+            <Link to="security" className="hover:text-orange-500! transition!">
+              Bảo mật thông tin khách hàng
+            </Link>
+          </ul>
+        </div>
+
+        <div>
+          <div className="flex items-center gap-2 font-bold text-lg text-orange-500 mb-3">
+            <EnvironmentOutlined /> Liên hệ
+          </div>
+          <div className="space-y-3">
+            {contactItems.map((item, i) => (
+              <div key={i} className="flex gap-2 items-start">
+                <span className="text-orange-500! mt-1">{item.icon}</span>
+                <a
+                  href={item.href}
+                  target={item.target ?? "_self"}
+                  rel={item.target === "_blank" ? "noopener noreferrer" : undefined}
+                  className="hover:text-orange-500! transition!"
+                >
+                  {item.text}
+                </a>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-4">
+            <label className="font-medium text-white block mb-2">
+              Đăng ký nhận tin khuyến mãi
+            </label>
+            <div className="flex">
+              <input
+                type="text"
+                placeholder="Nhập email..."
+                className="px-3 py-2 rounded-l-md w-full bg-gray-800 text-white border border-gray-700 focus:outline-none"
+              />
+              <button className="bg-orange-500 px-4 rounded-r-md hover:bg-orange-600 transition">
+                <SendOutlined className="text-white" />
+              </button>
+            </div>
+            <p className="text-xs text-gray-500 mt-1">
+              Nhận thông tin sale sớm nhất, ưu đãi độc quyền
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="border-t border-gray-700 py-3 text-center text-gray-500 text-sm flex justify-around">
+        <p>© {new Date().getFullYear()} Codec. Tất cả quyền được bảo lưu.</p>
+        <p> Made with ❤️ in Vietnam</p>
+      </div>
+    </footer>
+  );
 };
 
 export default LayoutFooter;

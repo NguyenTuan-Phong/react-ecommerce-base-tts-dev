@@ -2,12 +2,14 @@ import { useMutation } from "@tanstack/react-query";
 import { createOrder } from "../../../services";
 import useUserStore from "../../../store/useUserStore";
 import type { DataCart } from "../type";
-import { useCart } from "./useCart";
 import { toast } from "react-toastify";
+import { push, ref } from "firebase/database";
+import { database } from "../../../firebaseConfig";
 
 export const useCreateOrder = (onSuccessCallback ?: () => void) => {
-
     const userId = useUserStore((state) => state.user?.id);
+    const user = useUserStore((state) => state.user);
+    
 
     const { 
         isPending: isPendingCreateOrder,
@@ -18,28 +20,28 @@ export const useCreateOrder = (onSuccessCallback ?: () => void) => {
         onError: (err: Error) => {
             toast.error(err.message || 'Có lỗi xảy ra vui lòng thử lại sau ít phút!');
         },
-        onSuccess: () => {
-            onSuccessCallback?.()
+        onSuccess: async (response: any) => {
+            const adminId = "admin"
+            const orderCode = response.data.code || "Không xác định";
+            const notiRef = ref(database, `notifications/${adminId}`);
+            await push(notiRef, {
+                message: `Khách hàng ${user?.username || "ẩn danh"} vừa đặt đơn hàng || mã ${orderCode}.`,
+                orderCode,
+                type: "order",
+                timestamp: Date.now(),
+                read: false,
+            });
+
+            onSuccessCallback?.();
+            const paymentUrl = response.data.paymentUrl;
+            if (paymentUrl) {
+                window.location.href = paymentUrl;
+            }
         }
     });
-    const {
-        dataCartItem,
-    } = useCart();
 
     const handleCreateOrder = (value: DataCart) => {
-        console.log(value.voucherCode);
-        
-        const data= {
-            ...value,
-            items: dataCartItem!.data.cartItems.map((item) => ({
-                productId: item.product.id || '',
-                quantity: item.quantity || 0,
-                price: item.product.price || 0,
-            })),
-        }
-        console.log(data);
-        
-        createOrderMutation({ userId: userId!, value: data });
+        createOrderMutation({ userId: userId!, value });
     };
 
     return {

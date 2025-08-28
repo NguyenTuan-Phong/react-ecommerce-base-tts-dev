@@ -16,7 +16,8 @@ export interface Product {
     publisher: {
         id: string;
         name: string;
-    }
+    },
+    availableQuantity:number
 }
 
 export interface Category {
@@ -50,8 +51,10 @@ export interface ResponsePublishers {
 // }
 
 export interface ResponseCategory {
-    data:category[]
-
+    data:{
+        content:category[],
+        currentTotalElementsCount: number
+    }
 }
 
 export interface category {
@@ -67,4 +70,8 @@ export interface categoryItems {
 
 export interface ResponseGetCategoryDetail {
     data:categoryItems
+}
+
+export interface ResponseSearchProductByImage {
+    data: Product[]
 }

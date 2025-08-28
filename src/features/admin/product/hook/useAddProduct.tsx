@@ -5,8 +5,6 @@ import { createProduct } from "../../../../services";
 export const useCreateProduct = () => {
   const queryClient = useQueryClient();
   const token = localStorage.getItem("token");
-  console.log("Token:", token); 
-
 
   const {
     mutate: createProductMutate,

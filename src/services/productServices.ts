@@ -1,4 +1,3 @@
-// import { get, post } from '../config/axios-config';
 import { get, post } from '../config/axios-config';
 import { API_PATHS } from '../constants/apiPath';
 import { type ResponseCategory, type ResponseGetCategoryDetail, type ResponseProduct, type ResponsePublishers } from '../features/homepages/type';
@@ -198,7 +197,6 @@ export const updateProduct = async (
     publisherId: payload.publisherId,
     categoryItemIds: payload.categoryIds,
   };
-  console.log(id);
   
 
   const blob = new Blob([JSON.stringify(requestPayload)], {
@@ -238,6 +236,7 @@ export const createProduct = async (
     categoryItemIds,
     color,
     size,
+    embedding
   }: {
     name: string;
     code: string;
@@ -249,11 +248,12 @@ export const createProduct = async (
     categoryItemIds: number[];
     color: string;
     size: string;
+    embedding: number[]
   },
   token: string
 ) => {
   const formData = new FormData();
-
+  
   const requestPayload = {
     name,
     price,
@@ -264,6 +264,7 @@ export const createProduct = async (
     categoryItemIds,
     color,
     size,
+    embedding
   };
 
   const blob = new Blob([JSON.stringify(requestPayload)], {
@@ -400,10 +401,10 @@ export const getAllFlashSale = async (
   return await get({
     url: API_PATHS.PRODUCT.getAllFlashSale,
     params,
-  });
+  });1111
 };
 
-export const getFlashSaleDetail = async (id: number) => {
+export const getFlashSaleDetail = async (id: number): Promise<any> => {
   return await get({
     url: `${API_PATHS.PRODUCT.getFlashSaleDetail}/${id}`,
   });

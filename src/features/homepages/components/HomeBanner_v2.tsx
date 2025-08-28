@@ -1,105 +1,156 @@
 import { Link } from "react-router-dom"
-import p_kien from '../../../assets/img/04_Jul6bacdcd6a63d8b6a4e46c8337fc12342.png'
-import loa from '../../../assets/img/04_Jula2b2fecb48c5967badfe4d137f8508ec.png'
-import tan_nhiet from '../../../assets/img/04_Jul476c025120f6806e9d46a90f17cebbdf.png'
-import mo_hinh from '../../../assets/img/04_Jul7f64f21fb6ba6d30b7932b6ad017b870.png'
-import gaming from '../../../assets/img/04_Julbc98282e1bb9acf041f8c94b05ccdfcb.png'
-import ban_ghe from '../../../assets/img/04_Jul58a3f59ace6732aceb452a6e387c0c20.png'
-import banner_yeucau from '../../../assets/img/04_Jul4b2820f0c4fe29e2d289589b90e47f4c.png'
-import banner_xuhuong from '../../../assets/img/09_Jul9860edbd0f637428e39fde95121313ed.png'
-import {Carousel, Col, Row} from 'antd'
-import CategoriesMenu from "./Menu"
-  
+import banner_pc from '../../../../public/images/baner_pc.png'
+import banner_sale from '../../../../public/images/sale.png'
+import { Carousel } from 'antd'
+import ImageWithFallback from "../../../components/img/ImageWithFallback"
+
 const HomeBannerv2 = () => {
 
     return(
-        <div className="banner h-auto"> 
-            <Row gutter={[16, 16]}
-                    className="max-w-[1400px] mx-auto relative max-h-[680px]"
-                >
-                <Col xs={0} lg={6} className="h-full rounded-[10px]"
-                >
-                    <CategoriesMenu />
-                </Col>
+            <div className="banner h-auto mx-auto max-h-[680px]">
 
-                <Col xs={24} lg={18} className="h-full">
-
-                    <Row gutter={[16, 16]}>
-                        <Col xs={24} lg={18}>
-                            <section className="w-full h-full object-cover relative overflow-hidden">
-                                <Carousel
-                                    autoplay
-                                    autoplaySpeed={10000}
-                                    dots={false}
-                                    className="rounded-[20px]"
-                                >
-                                    <div>
-                                    <Link to="">
-                                        <img
-                                        src={banner_yeucau}
-                                        alt="Banner sản phẩm theo yêu cầu"
-                                        className="w-full h-full object-cover rounded-[20px]"
-                                        />
-                                    </Link>
+                    <div className="w-full">
+                        <Carousel autoplay autoplaySpeed={10000}>
+                            <div className="relative group">
+                                <Link to="/pc">
+                                    <ImageWithFallback
+                                    src={banner_pc}
+                                    className="w-full h-full max-h-[680px] rounded-[10px]"
+                                    alt="Ưu đãi Gaming PC SUPER Sale"
+                                    />
+                                </Link>
+                                <div className="absolute inset-0 z-10 bg-black/30 opacity-0 group-hover:opacity-100 
+                                                transition-opacity duration-300 rounded-[10px]" />
+                                <div className="absolute bottom-1/2 left-4 z-20 text-white transition-opacity duration-300 
+                                                opacity-0 group-hover:opacity-100 transform translate-y-1/2 hidden sm:block">
+                                    <div className="text-white">
+                                        <div className="sale-badge inline-block px-4 py-2 rounded-full text-white font-bold text-sm mb-4 bg-red-600 animate-pulse">
+                                        🔥 SUPER SALE
+                                        </div>
+                                        <h2 className="text-4xl font-bold mb-2">Gaming PC</h2>
+                                        <p className="text-xl mb-4">Giảm đến 50%</p>
+                                        <p className="text-lg opacity-90">Cấu hình khủng - Giá siêu hời</p>
                                     </div>
-
-                                    <div className="hidden lg:block">
-                                        <Link to="/">
-                                            <img
-                                            src={banner_xuhuong}
-                                            alt="Banner sản phẩm xu hướng"
-                                            className="w-full h-full object-cover rounded-[20px]"
-                                            />
-                                        </Link>
+                                </div>
+                                <div className="absolute bottom-1/2 right-4 z-20 text-white transition-opacity duration-300 
+                                                opacity-0 group-hover:opacity-100 transform translate-y-1/2 hidden sm:block">
+                                    <div className="text-white text-right">
+                                        <div className="text-6xl font-bold">50%</div>
+                                        <div className="text-xl">OFF</div>
                                     </div>
-                                </Carousel>
-                            </section>
-                        </Col>
-
-                        <Col xs={0} lg={6}>
-                            <div className="flex flex-col gap-2 h-full">
-                                <Link to="">
-                                    <img src={mo_hinh} alt="Mô hình" />
-                                </Link>
-                                <Link to="">
-                                    <img src={gaming} alt="Gaming" />
-                                </Link>
-                                <Link to="">
-                                    <img src={ban_ghe} alt="Bàn ghế gaming" />
-                                </Link>
+                                </div>
+                                
+                                <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
+                                    <div className="text-center text-white transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 pointer-events-auto">
+                                        <h3 className="text-2xl font-bold mb-2">🎮 Gaming PC Sale</h3>
+                                        <p className="text-lg mb-4">
+                                            Khám phá bộ sưu tập PC Gaming với giá ưu đãi
+                                        </p>
+                                        <div className="bg-white text-blue-600 px-6 py-2 rounded-full font-bold hover:bg-blue-50 transition-colors cursor-pointer inline-block">
+                                            <Link to={'/product-sale'}>
+                                                Khám phá →
+                                            </Link>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </Col>
-                    </Row>
 
+                            <div className="relative group">
+                                <Link to="/sale">
+                                    <ImageWithFallback
+                                    src={banner_sale}
+                                    className="w-full h-full max-h-[680px] rounded-[10px]"
+                                    alt="Khuyến mãi HOT"
+                                    />
+                                </Link>
+                                <div className="absolute inset-0 z-10 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-[10px]" />
+                                <div className="absolute bottom-1/2 left-4 z-20 text-white transition-opacity duration-300 
+                                                opacity-0 group-hover:opacity-100 transform translate-y-1/2 hidden sm:block">
+                                    <div className="text-white">
+                                        <div className="bg-yellow-400 inline-block px-4 py-2 rounded-full text-black font-bold text-sm mb-4 animate-bounce">
+                                            ⏰ FLASH SALE
+                                        </div>
+                                        <h2 className="text-4xl font-bold mb-2">Giờ Vàng</h2>
+                                        <p className="text-xl mb-4">Chỉ trong 24h</p>
+                                        <p className="text-lg opacity-90">Giảm sốc - Số lượng có hạn</p>
+                                    </div>
+                                    <div className="text-white text-right">
+                                        <div className="text-5xl font-bold">24H</div>
+                                        <div className="text-xl">ONLY</div>
+                                    </div>
+                                </div>
+                                <div className="absolute bottom-1/2 right-4 z-20 text-white transition-opacity duration-300 
+                                                opacity-0 group-hover:opacity-100 transform translate-y-1/2 hidden sm:block">
+                                     <div className="text-white text-right">
+                                        <div className="text-5xl font-bold">24H</div>
+                                        <div className="text-xl">ONLY</div>
+                                    </div>
+                                </div>
 
-                    <div className="hidden lg:block mt-4">
-                        <Row gutter={[16, 16]}>
-                            <Col span={8}>
-                            <Link to="">
-                                <div className="text-center">
-                                <img src={p_kien} alt="Phụ kiện máy tính" />
+                                <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
+                                    <div className="text-center text-white transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 pointer-events-auto">
+                                        <h3 className="text-2xl font-bold mb-2">💻 Combo Setup Hoàn Hảo</h3>
+                                        <p className="text-lg mb-4">
+                                            Bộ combo PC + màn hình + phụ kiện với giá ưu đãi
+                                        </p>
+                                        <div className="bg-white text-blue-600 px-6 py-2 rounded-full font-bold hover:bg-blue-50 transition-colors cursor-pointer inline-block">
+                                            
+                                            <Link to={'/product-sale'}>
+                                                Khám phá →
+                                            </Link>
+                                        </div>
+                                    </div>
                                 </div>
-                            </Link>
-                            </Col>
-                            <Col span={8}>
-                            <Link to="">
-                                <div className="text-center">
-                                <img src={loa} alt="Loa" />
+                            </div>
+
+                            <div className="relative group">
+                                <Link to="/sale">
+                                    <ImageWithFallback
+                                    src={banner_sale}
+                                    className="w-full h-full max-h-[680px] rounded-[10px]"
+                                    alt="Khuyến mãi HOT"
+                                    />
+                                </Link>
+                                <div className="absolute inset-0 z-10 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-[10px]" />
+                                <div className="absolute bottom-1/2 left-4 z-20 text-white transition-opacity duration-300 
+                                                opacity-0 group-hover:opacity-100 transform translate-y-1/2 hidden sm:block">
+                                    <div className="text-white">
+                                        <div className="bg-yellow-500 inline-block px-4 py-2 rounded-full text-black font-bold text-sm mb-4">
+                                            ⚡ COMBO HOT
+                                        </div>
+                                        <h2 className="text-4xl font-bold mb-2">Combo Setup</h2>
+                                        <p className="text-lg opacity-90">Tiết kiệm đến 2 triệu</p>
+                                    </div>
                                 </div>
-                            </Link>
-                            </Col>
-                            <Col span={8}>
-                            <Link to="">
-                                <div className="text-center">
-                                <img src={tan_nhiet} alt="Tản Nhiệt" />
+                                <div className="absolute bottom-1/2 right-4 z-20 text-white transition-opacity duration-300 
+                                                opacity-0 group-hover:opacity-100 transform translate-y-1/2 hidden sm:block">
+                                    <div className="text-white text-right">
+                                        <div className="text-4xl font-bold">COMBO</div>
+                                        <div className="text-xl">DEAL</div>
+                                    </div>
                                 </div>
-                            </Link>
-                            </Col>
-                        </Row>
+
+                                <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
+                                    <div className="text-center text-white transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 pointer-events-auto">
+                                        <h3 className="text-2xl font-bold mb-2">💻 Combo Setup Hoàn Hảo</h3>
+                                        <p className="text-lg mb-4">
+                                            Bộ combo PC + màn hình + phụ kiện với giá ưu đãi
+                                        </p>
+                                        <div className="bg-white text-blue-600 px-6 py-2 rounded-full font-bold hover:bg-blue-50 transition-colors cursor-pointer inline-block">
+                                            <Link to={'/combo-product-page'}>
+                                                Khám phá →
+                                            </Link>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </Carousel>
                     </div>
-                </Col>
-            </Row>
-        </div>
+
+                {/* </div> */}
+            </div>
+
     )
 }
 export default HomeBannerv2

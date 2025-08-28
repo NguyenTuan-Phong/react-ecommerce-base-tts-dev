@@ -19,70 +19,63 @@ const  InfoUser = () => {
 
     return(
         <div className="w-full flex flex-col gap-8">
-            <h1 className="text-center text-[20px] font-bold">Thông tin người dùng</h1>
-            {/* {isPending ? (
-                <Skeleton />
-            ) : ( */}
-                <div className="flex flex-col gap-4 text-[16px]">
-            {/* Họ và tên */}
-            <div className="flex flex-wrap items-center">
-                <p className="w-full sm:w-40 font-bold">Họ và tên:</p>
-                <p className="flex-1">{dataUser?.fullName}</p>
+            
+            <div>
+                <h1 className="text-center text-[20px] font-bold">Thông tin người dùng</h1>
+                <p className="text-center">Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
             </div>
-
-            {/* Email + Button xác thực */}
-            <div className="flex flex-wrap items-center gap-2">
-                <div className="flex flex-wrap items-center flex-1">
-                <p className="w-full sm:w-40 font-bold">Email:</p>
-                <p className="flex-1">{dataUser?.email}</p>
+            <div className="flex flex-col gap-4 text-[16px]">
+                <div className="flex flex-wrap items-center">
+                    <p className="w-full sm:w-40 font-bold">Họ và tên:</p>
+                    <p className="flex-1">{dataUser?.fullName}</p>
                 </div>
-                {dataUser?.statusUser === 2 && dataUser?.email && (
-                <Button className="h-10" onClick={showModalSendOTPVerifyAccount}>
-                    Xác thực người dùng
-                </Button>
-                )}
-            </div>
 
-            {/* Số điện thoại */}
-            <div className="flex flex-wrap items-center">
-                <p className="w-full sm:w-40 font-bold">Số điện thoại:</p>
-                <p className="flex-1">{dataUser?.phoneNumber}</p>
-            </div>
+                <div className="flex flex-wrap items-center gap-2">
+                    <div className="flex flex-wrap items-center flex-1">
+                    <p className="w-full sm:w-40 font-bold">Email:</p>
+                    <p className="flex-1">{dataUser?.email}</p>
+                    </div>
+                    {dataUser?.statusUser === 2 && dataUser?.email && (
+                    <Button className="h-10" onClick={showModalSendOTPVerifyAccount}>
+                        Xác thực người dùng
+                    </Button>
+                    )}
+                </div>
 
-            {/* Địa chỉ */}
-            <div className="flex flex-wrap items-center">
-                <p className="w-full sm:w-40 font-bold">Address:</p>
-                <p className="flex-1">{dataUser?.address}</p>
-            </div>
+                <div className="flex flex-wrap items-center">
+                    <p className="w-full sm:w-40 font-bold">Số điện thoại:</p>
+                    <p className="flex-1">{dataUser?.phoneNumber}</p>
+                </div>
 
-            {/* Ngày sinh */}
-            <div className="flex flex-wrap items-center">
-                <p className="w-full sm:w-40 font-bold">DateOfBirth:</p>
-                <p className="flex-1">{dataUser?.dateOfBirth}</p>
-            </div>
+                <div className="flex flex-wrap items-center">
+                    <p className="w-full sm:w-40 font-bold">Address:</p>
+                    <p className="flex-1">{dataUser?.address}</p>
+                </div>
 
-            {/* Trạng thái tài khoản */}
-            <div className="flex flex-wrap items-center font-bold gap-2">
-                <p className="w-full sm:w-40">Trạng thái tài khoản:</p>
-                <p
-                className={`flex-1 ${
-                    dataUser?.statusUser === 0
-                    ? "text-green-600"
-                    : dataUser?.statusUser === 1
-                    ? "text-red-600"
-                    : "text-blue-600"
-                }`}
-                >
-                {dataUser?.statusUser === 0
-                    ? "Đang hoạt động"
-                    : dataUser?.statusUser === 1
-                    ? "Không hoạt động"
-                    : "Chờ xác thực"}
-                </p>
-            </div>
-            </div>
+                <div className="flex flex-wrap items-center">
+                    <p className="w-full sm:w-40 font-bold">DateOfBirth:</p>
+                    <p className="flex-1">{dataUser?.dateOfBirth}</p>
+                </div>
 
-            {/* )} */}
+
+                <div className="flex flex-wrap items-center font-bold gap-2">
+                    <p className="w-full sm:w-40">Trạng thái tài khoản:</p>
+                    <p className={`flex-1 ${
+                            dataUser?.statusUser === 0
+                            ? "text-green-600"
+                            : dataUser?.statusUser === 1
+                            ? "text-red-600"
+                            : "text-blue-600"
+                        }`}
+                    >
+                        {dataUser?.statusUser === 0
+                            ? "Đang hoạt động"
+                            : dataUser?.statusUser === 1
+                            ? "Không hoạt động"
+                            : "Chờ xác thực"}
+                    </p>
+                </div>
+            </div>
 
             <Modal
             title={<h1 className="font-bold pb-5">Xác thực tài khoản</h1>}

@@ -1,0 +1,33 @@
+/* Auto scroll ngang */
+@keyframes scrollProducts {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-scroll {
+  animation: scrollProducts 30s linear infinite;
+}
+
+/* Hiệu ứng nhấp nhô cho card */
+@keyframes floatUpDown {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.product-card {
+  border: 2px solid transparent; 
+  border-radius: 8px;
+  animation: floatUpDown 3s ease-in-out infinite;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+}
+
+.product-card:hover {
+  transform: translateY(-12px) scale(1.05);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  border-color: #fa7833; /* Màu viền khi hover */
+}
+
+
+
+

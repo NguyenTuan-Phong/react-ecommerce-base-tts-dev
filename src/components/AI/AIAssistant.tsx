@@ -11,14 +11,12 @@ const AlAssistant = () => {
     return (
         <div className="flex flex-col">
             {isShowChat ? (
-                <div>
-                    <Chat 
-                        onClick={() => setIsShowChat(false)}
-                    />
-                </div>
+                <Chat 
+                    onClick={() => setIsShowChat(false)}
+                />
             ) : (
                 <div className="flex items-center justify-end">
-                    <TextReveal text="Trợ Lý AI" interval={150} pause={600} />
+                    <TextReveal text="Trợ Lý AI" interval={400} pause={600} />
                     <DotLottieReact
                         src={robot}
                         loop

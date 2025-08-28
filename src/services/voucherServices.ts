@@ -2,12 +2,12 @@ import {get, post} from '../config/axios-config';
 import {API_PATHS} from '../constants/apiPath';
 import type { ResponseDetailVoucher, ResponseVoucher } from '../features/cart/type';
 
-export const getAllVouchers = async () : Promise<ResponseVoucher> => {
+export const getAllVouchers = async (page: number,size: number) : Promise<ResponseVoucher> => {
     return await get({
         url: API_PATHS.VOUCHER.get,
         params: {
-            page: 0,
-            size: 10,
+            page: page,
+            size: size,
         },
     });
 };

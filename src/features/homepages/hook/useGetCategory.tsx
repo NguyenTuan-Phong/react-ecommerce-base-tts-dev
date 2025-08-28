@@ -10,7 +10,7 @@ export const useGetCategory = (page?: number, size?: number) => {
         data: ResponseGetCategory,
         refetch: refetchCategory
     } = useQuery<ResponseCategory> ({
-        queryKey: ["getCategory"],
+        queryKey: ["getCategory",page,size],
         queryFn:() => getCategory(page,size),
         retry: false,
         refetchOnMount: false,

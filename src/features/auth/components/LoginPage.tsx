@@ -1,73 +1,75 @@
-import { Link } from "react-router-dom";
 import { Form, Input, Button } from "antd";
+import { FacebookOutlined, TwitterOutlined, GoogleOutlined } from "@ant-design/icons";
 import { useLogin } from "../hook/useLogin";
+import { Link } from "react-router-dom";
+
 const LoginPage = () => {
-    const {isPending, handleLogin} = useLogin();
+  const { isPending, handleLogin } = useLogin();
+  return (
+    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-orange-400 via-pink-500 to-red-500">
+      <div className="w-[900px] h-[500px] flex rounded-lg overflow-hidden shadow-lg">
 
-    return(
-        <div className="">
-            <div className="flex gap-3 max-w-[1400px] mx-auto py-5">
-                <Link to={'/'} className="link">TRANG CHỦ</Link>
-                <p className="section-text">/</p>
-                <Link to={'/login'}className="link">ĐĂNG NHẬP TÀI KHOẢN</Link>
-            </div>
-            <div className="py-4">
-                <div className="md:flex max-w-[1400px] mx-auto gap-5 bg-[white] p-5">
-                    <section className="flex-1 flex flex-col gap-3 text-[16px]">
-                        <b>Thông tin khách hàng đăng nhập</b>
-                        <Form
-                            name="form_login"
-                            onFinish={handleLogin}
-                        >   
-                            <div className="flex flex-col md:flex-row md:items-center gap-1 w-full">
-                            <p className="text-[16px] md:w-[180px] w-full">Email đăng nhập</p>
-                            <Form.Item
-                                name="email"
-                                className="flex-1 w-full"
-                                rules={[
-                                { required: true, message: "Vui lòng nhập Email!" },
-                                { type: "email", message: "Email không hợp lệ" }
-                                ]}
-                            >
-                                <Input style={{ height: 48 }} placeholder="Vui lòng nhập Email" />
-                            </Form.Item>
-                            </div>
-
-                            
-                            <div className="flex flex-col md:flex-row md:items-center gap-1 w-full">
-                                <p className="text-[16px] w-[180px]">Mật khẩu</p>
-                                <Form.Item
-                                    name="password"
-                                    className="flex-1"
-                                    rules={[
-                                        {
-                                            required : true, message: "Vui lòng nhập Mật khẩu!",
-                                        }
-                                    ]}
-                                >
-                                    <Input.Password style={{height: 48}} placeholder="Vui lòng nhập Mật khẩu"/>
-                                </Form.Item>
-                            </div>
-                            <div className="flex">
-                                <div className="w-0 sm:w-[180px] md:w-[180px] lg:w-[180px]"></div>
-                                <Form.Item className="flex-1">
-                                    <Button loading={isPending} htmlType="submit" style={{height : 48,width : 150, background : '#29A07E', fontSize: '16px', color : 'white'}}>
-                                        {isPending ? "Đang đăng nhập" : "Đăng nhập"}
-                                    </Button>
-                                    <Link style={{paddingLeft: 20}} to={'/forget'}>Quên mật khẩu ?</Link>
-                                </Form.Item>
-                            </div>
-                            
-                        </Form>
-                    </section>
-                    <section className="flex-1 gap-3 flex flex-col text-[16px]">
-                        <b>Bạn chưa là thành viên ?</b>
-                        <p>Đăng ký là thành viên để hưởng nhiều lợi ích và đặt mua hàng dễ dàng hơn.</p>
-                        <Link to={'/register'}>Đăng ký tài khoản</Link>
-                    </section>
-                </div>
-            </div>
+        <div className="flex-1 bg-black/50 flex flex-col justify-center p-10 text-white">
+          <h1 className="text-5xl font-bold mb-4">Welcome back!</h1>
+          <p className="font-bold leading-relaxed text-[18px]">Đăng nhập để mua sắm nhanh hơn</p>
+          <p className="text-sm leading-relaxed"> 
+            Lưu địa chỉ, theo dõi đơn hàng và nhận ưu đãi dành riêng cho bạn.
+          </p>
         </div>
-    )
-}
+
+    
+        <div className="flex-1 bg-black/60 flex flex-col justify-center p-10">
+          <h2 className="text-white text-2xl font-bold mb-6">Đăng nhập</h2>
+          <Form 
+          layout="vertical" 
+          className="w-full max-w-sm"
+          name="form_login"
+          onFinish={handleLogin}
+          >
+            
+            <Form.Item label={<span className="text-white font-bold">
+              Email</span>} name="email" 
+              rules={[ { required: true, message: "Nhập email của bạn!" }, 
+              { type: "email", message: "Invalid email" }, ]} 
+              className="[&_.ant-form-item-explain-error]:text-white!" > 
+              <Input placeholder="Nhập email của bạn" size="large" /> 
+            </Form.Item> 
+            <Form.Item label={<span className="text-white font-bold">
+              Mật khẩu</span>} name="password" 
+              rules={[ { required: true, message: "Nhập mật khẩu của bạn!" }, ]} 
+              className="[&_.ant-form-item-explain-error]:text-white!" > 
+              <Input.Password placeholder="Nhập mật khẩu của bạn!" size="large" /> 
+            </Form.Item>
+            <Link className="justify-end! text-white!" to={'/forget'}>Quên mật khẩu ?</Link>
+            <div className="flex items-center my-4">
+              <div className="flex-1 h-px bg-gray-500"></div>
+              <span className="px-2 text-gray-300">OR</span>
+              <div className="flex-1 h-px bg-gray-500"></div>
+            </div>
+            <div className="flex justify-center space-x-4 mb-6">
+              <Button shape="circle" icon={<FacebookOutlined />} />
+              <Button shape="circle" icon={<TwitterOutlined />} />
+              <Button shape="circle" icon={<GoogleOutlined />} />
+            </div>
+
+           
+            <Form.Item>
+              <Button loading={isPending} 
+              htmlType="submit" size="large" 
+              className="w-full bg-red-500 text-white hover:text-[#fa7833]!" > 
+              {isPending ? "ĐANG ĐĂNG NHẬP..." : "ĐĂNG NHẬP"} </Button>
+            </Form.Item>
+            
+          </Form>
+
+          <p className="text-gray-300 text-sm mt-2">
+           Bạn chưa có tài khoản? {" "}
+            <Link to={"/register"} className="text-green-400">Đăng ký</Link>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default LoginPage;

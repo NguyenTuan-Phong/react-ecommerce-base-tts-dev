@@ -35,7 +35,7 @@ const ChangePassword = () => {
                     ]}
                     >
                     <Input.Password
-                        className="w-full p-3"
+                        className="w-full p-3!"
                         placeholder="Nhập mật khẩu mới"
                     />
                     </Form.Item>
@@ -68,7 +68,7 @@ const ChangePassword = () => {
                     ]}
                     >
                     <Input.Password
-                        className="w-full p-3"
+                        className="w-full p-3!"
                         placeholder="Nhập lại mật khẩu mới"
                     />
                     </Form.Item>

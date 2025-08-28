@@ -1,13 +1,14 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Modal } from 'antd';
+import { Button } from 'antd';
+import { Trash2 } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import IMG from '../../../assets/img_news_event/14-maxresdefault-2-711x400.jpg';
+import type { TypeUpdate } from '../../../services';
+import useUserStore from '../../../store/useUserStore';
+import type { CartItem, IComboItemsResp } from '../../../types';
+import { useUpdateCart } from '../hook';
 import { useCart } from '../hook/useCart';
 import Pay from './Pay';
-import useUserStore from '../../../store/useUserStore';
-import { useEffect, useState } from 'react';
-import type { CartItem } from '../../../types';
-import { useUpdateCart } from '../hook';
+import ImageWithFallback from '../../../components/img/ImageWithFallback';
 
 const CartPage = () => {
   const {
@@ -19,38 +20,40 @@ const CartPage = () => {
     handleClearCart,
   } = useCart();
 
-  const {
-    isPendingUpdateItemCart,
-    handleUpdateItemCart,
-    isModalOpen,
-    setIsModalOpen
-  } = useUpdateCart(refetchCart);
+  const { isPendingUpdateItemCart, handleUpdateItemCart, isModalOpen, setIsModalOpen } =
+    useUpdateCart(refetchCart);
+  console.log('[LOG] ~ CartPage ~ isModalOpen:', isModalOpen);
+  console.log('[LOG] ~ CartPage ~ isPendingUpdateItemCart:', isPendingUpdateItemCart);
 
-  const [selectedItem, setSelectedItem] = useState<CartItem | null>(null);
-
+  const [selectedItem, setSelectedItem] = useState<CartItem | null | IComboItemsResp>(null);
   const [currentQuantity, setCurrentQuantity] = useState(1);
-  
-
-
-  const cartItems = dataCartItem?.data?.cartItems ?? [];
-
-  useEffect(() => {
-  console.log('Cart Items:', dataCartItem);
-}, [dataCartItem]);
+  console.log('[LOG] ~ CartPage ~ currentQuantity:', currentQuantity);
+  const dataCartItemMemo = useMemo(() => {
+    return {
+      cartItems: dataCartItem?.data?.cartItems || ([] as CartItem[]),
+      comboItems: dataCartItem?.data?.comboItems || ([] as IComboItemsResp[]),
+    };
+  }, [dataCartItem]);
 
   const userId = useUserStore((state) => state.user?.id);
 
+  const totalQuantity = dataCartItemMemo.cartItems.reduce((sum, item) => sum + item.quantity, 0)
+                      + dataCartItemMemo.comboItems.reduce((sum, item) => sum + item.quantity, 0);
+  const totalPrice = dataCartItemMemo.cartItems.reduce((sum, item) => {
+      const price =
+        item.product.flashPrice && item.product.flashPrice > 0
+          ? item.product.flashPrice
+          : item.product.price;
 
-
-  const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-  const totalPrice = cartItems.reduce((sum, item) => {
-  const price = item.product.flashPrice && item.product.flashPrice > 0
-    ? item.product.flashPrice
-    : item.product.price;
-
-  return sum + item.quantity * price;
-}, 0);
-
+      return sum + item.quantity * price;
+    },0) + 
+    
+    (dataCartItem?.data?.comboItems || []).reduce((sum, combo) => {
+      const price = combo.combo.price;
+      return sum + combo.quantity * price;
+    }, 0)
+  
+  ;
 
   const data = {
     totalQuantity,
@@ -59,213 +62,473 @@ const CartPage = () => {
 
   useEffect(() => {
     setCurrentQuantity(selectedItem?.quantity!);
-  },[selectedItem])
-  
-  const handleIncreaseQuantity = () => {
-    setCurrentQuantity(currentQuantity + 1);
-  }
+  }, [selectedItem]);
 
-  const handleDecreaseQuantity = () => {
-    if (currentQuantity > 1) {
-      setCurrentQuantity(currentQuantity - 1);
-    }
-  }
-
-  const handleUpdate = () => {
-    const productId = selectedItem?.product.productId!
-    handleUpdateItemCart({ productId: productId, newQuantity: currentQuantity })
-  }
-
+  const handleUpdateV2 = (data: TypeUpdate) => {
+    handleUpdateItemCart(data);
+  };
 
   return (
-    <div className='max-w-[1400px] flex mx-auto flex-col'>
-      <section className='flex gap-4 py-[20px]'>
-        <Link className="link" to={'/'}>
+    <div className='max-w-screen-xl mx-auto flex flex-col px-4 lg:px-6 min-h-[calc(100vh-512px)]'>
+      {/* Breadcrumbs */}
+      <section className='flex items-center gap-3 py-4 text-sm text-gray-500'>
+        <Link className='hover:text-gray-700 transition' to={'/'}>
           TRANG CHỦ
         </Link>
-        <p className='section-text'>/</p>
-        <p className='font-bold section-text'>THÔNG TIN GIỎ HÀNG</p>
+        <span className='select-none'>/</span>
+        <p className='font-semibold text-gray-800'>THÔNG TIN GIỎ HÀNG</p>
       </section>
 
-      {cartItems.length > 0 ? (
+      {dataCartItemMemo.cartItems.length || dataCartItemMemo.comboItems.length > 0 ? (
         <>
-          <section className='my-[10px] gap-4 flex flex-col'>
-            <div className='bg-[white] rounded-[8px]'>
-              <div className='flex p-4 flex-wrap'>
-                <p className='font-[600] flex-1'>THÔNG TIN GIỎ HÀNG</p>
-                <div className='gap-4 flex flex-wrap'>
-                  <div className='hover:cursor-pointer font-[600]'>
-                    <Button
-                      loading={isPendingClearCart}
-                      className='px-5! py-4! h-10!'
-                      onClick={() => handleClearCart(userId!)}
-                    >
-                      XÓA GIỎ HÀNG
-                    </Button>
-                  </div>
+          {/* Header Card */}
+          <section className='my-3 flex flex-col gap-4'>
+            <div className='bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden'>
+              <div className='flex flex-wrap items-center justify-between p-4'>
+                <p className='font-semibold text-gray-800'>THÔNG TIN GIỎ HÀNG</p>
+                <div>
+                  <Button
+                    loading={isPendingClearCart}
+                    className='!h-10 !px-5 rounded-lg shadow-sm hover:shadow transition'
+                    onClick={() => handleClearCart(userId!)}
+                  >
+                    XÓA GIỎ HÀNG
+                  </Button>
                 </div>
               </div>
-              <div className='h-[1px] bg-[#f5f5f5]'></div>
+              <div className='h-px bg-gray-100' />
 
-              {/* title */}
-              <div className='p-4 hidden lg:flex'>
-                <div className='flex-1'>
-                  <b>Sản phẩm</b>
-                </div>
-                <div className='w-[180px] text-center'>
-                  <b>Đơn giá</b>
-                </div>
-                <div className='w-[180px] text-center'>
-                  <b>Số lượng</b>
-                </div>
-                <div className='w-[180px] text-center'>
-                  <b>Số tiền</b>
-                </div>
-                <div className='w-[120px] text-center'>
-                  <b>Thao tác</b>
-                </div>
+              {/* Title row (desktop) */}
+              <div className='hidden lg:grid grid-cols-[1fr_180px_180px_180px_120px] items-center px-4 py-3 text-sm text-gray-700 bg-gray-50'>
+                <div className='font-semibold'>Sản phẩm</div>
+                <div className='text-center font-semibold border-l border-gray-200'>Đơn giá</div>
+                <div className='text-center font-semibold border-l border-gray-200'>Số lượng</div>
+                <div className='text-center font-semibold border-l border-gray-200'>Số tiền</div>
+                <div className='text-center font-semibold border-l border-gray-200'>Thao tác</div>
               </div>
             </div>
 
-            {cartItems.map((item: any) => (
-              <div key={item.id} className='flex p-3 bg-[white] rounded-[8px] gap-2 flex-1'>
-                <img className='h-[100px] w-[100px] rounded-[5px]' src={IMG} alt='Ảnh sản phẩm' />
-                <div className='flex flex-wrap'>
-                  {/* Mã sản phẩm */}
-                  <div className='flex-1 flex gap-5'>
-                    <ul className='flex flex-col'>
-                      <b className="text-[18px] w-[170px] sm:min-w-[200px] md:w-[400px] lg:min-w-[600px] whitespace-normal break-words">
-                        {item.product.name}
-                      </b>
-                      <li>Mã sản phẩm: {item.product.code || 'N/A'}</li>
-                    </ul>
-                  </div>
-                
-                  <div className='w-[180px] text-center text-[16px] text-[#818181] mt-3 content-center hidden lg:block'>
-                    <div className={`text-[18px] font-bold ${item.product.flashPrice ? 'text-[#29A07E]' : 'text-[#E94E1B]'}`}>
-                      {(item.product.flashPrice && item.product.flashPrice > 0 
-                          ? item.product.flashPrice 
-                          : item.product.price
-                        ).toLocaleString()} VNĐ
-                    </div>
-                  </div>
+            {/* Items */}
+            {dataCartItemMemo.cartItems.map((item: CartItem) => {
+              const unitPrice =
+                item.product.flashPrice && item.product.flashPrice > 0
+                  ? item.product.flashPrice
+                  : item.product.price;
 
-
-                  <div className='flex flex-col flex-wrap sm:flex-row md:flex-row lg:flex-row sm:items-center gap-11'>
-                    <div className='w-[180px] text-center text-[16px] text-[#818181] mt-3 flex items-center justify-center gap-2'>
-                      <div className='w-10 h-10 bg-[#818181] rounded-full opacity-25 text-black flex items-center justify-center hover:cursor-pointer'
-                      onClick={() => {
-                        setSelectedItem(item);
-                        setIsModalOpen(true);
-                      }}>
-                        -
-                      </div>
-
-                      <input
-                        className='w-[60px] h-10 text-center'
-                        type='text'
-                        readOnly
-                        value={item.quantity}
-                      />
-
-                      <div className='w-10 h-10 bg-[#818181] rounded-full opacity-50 text-black flex items-center justify-center hover:cursor-pointer'
-                      onClick={() => {
-                        setSelectedItem(item);
-                        setIsModalOpen(true);
-                      }}>
-                        +
+              return (
+                <div
+                  key={item.id}
+                  className='bg-white rounded-xl shadow-sm border border-gray-100 lg:overflow-hidden'
+                >
+                  {/* Desktop grid layout for clear column distinction */}
+                  <div className='hidden lg:grid grid-cols-[1fr_180px_180px_180px_120px] items-center divide-x divide-gray-100'>
+                    {/* Sản phẩm */}
+                    <div className='px-4 py-4'>
+                      <div className='flex gap-3'>
+                        <ImageWithFallback
+                          className='h-24 w-24 rounded-md object-cover flex-shrink-0'
+                          src={item.product.imageUrl}
+                          alt={item.product.name}
+                        />
+                        <div className='min-w-0'>
+                          <p
+                            className='text-lg font-semibold text-gray-900 truncate max-w-[400px]'
+                            title={item.product.name}
+                          >
+                            {item.product.name}
+                          </p>
+                          <p className='text-sm text-gray-500'>
+                            Mã sản phẩm: {item.product.code || 'N/A'}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                    <div className='flex flex-wrap sm:flex-col md:flex-col lg:flex-row sm:items-center gap-y-2 sm:gap-x-4 gap-3'>
-                      {/* Giá */}
-                      <div className="text-[18px] font-bold text-[#29A07E]">
-                           {(item.product.flashPrice && item.product.flashPrice > 0 ? item.product.flashPrice : item.product.price).toLocaleString()} VNĐ
-                      </div>
 
-                                              
-
-                      {/* Nút Xóa */}
+                    {/* Đơn giá */}
+                    <div className='px-4 py-4 text-center'>
                       <div
-                        className='text-[16px] sm:text-right  hover:cursor-pointer text-center'
-                        onClick={() => handleRemoveProduct(userId!, item.product.id)}
+                        className={`text-lg font-bold ${
+                          item.product.flashPrice ? 'text-emerald-600' : 'text-orange-600'
+                        }`}
                       >
-                        <Button className='px-5!' loading={isPendingRemoveProduct}>
-                          Xóa
+                        {unitPrice.toLocaleString()} VNĐ
+                      </div>
+                    </div>
+
+                    {/* Số lượng */}
+                    <div className='px-4 py-4 text-center'>
+                      <div className='mx-auto w-max flex items-center gap-2'>
+                        <button
+                          type='button'
+                          className='w-9 h-9 rounded-full bg-gray-50 text-gray-700 grid place-items-center border border-gray-200 hover:bg-gray-100 active:scale-95 transition'
+                          onClick={() => {
+                            setSelectedItem(item);
+                            // setIsModalOpen(true);
+                            handleUpdateV2({
+                              productId: item.product.id,
+                              newQuantity: Number(item.quantity - 1),
+                            });
+                          }}
+                          aria-label='Giảm số lượng'
+                        >
+                          −
+                        </button>
+                        <input
+                          className='w-14 h-9 text-center border border-gray-200 rounded-md bg-white text-gray-900 select-none'
+                          type='text'
+                          readOnly
+                          value={item.quantity}
+                          aria-label='Số lượng hiện tại'
+                        />
+                        <button
+                          type='button'
+                          className='w-9 h-9 rounded-full bg-gray-50 text-gray-700 grid place-items-center border border-gray-200 hover:bg-gray-100 active:scale-95 transition'
+                          onClick={() => {
+                            setSelectedItem(item);
+                            // setIsModalOpen(true);
+                            handleUpdateV2({
+                              productId: item.product.id,
+                              newQuantity: Number(item.quantity + 1),
+                            });
+                          }}
+                          aria-label='Tăng số lượng'
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Số tiền */}
+                    <div className='px-4 py-4 text-center'>
+                      <div className='text-lg font-bold text-emerald-600'>
+                        {(unitPrice * item.quantity).toLocaleString()} VNĐ
+                      </div>
+                    </div>
+
+                    {/* Thao tác */}
+                    <div className='px-4 py-4 text-center'>
+                      <Button
+                        type='primary'
+                        danger
+                        icon={<Trash2 className='w-4 h-4' />}
+                        loading={isPendingRemoveProduct}
+                        onClick={() => handleRemoveProduct(userId!, item.product.id)}
+                        className='!px-4 !h-10 rounded-lg shadow-sm hover:shadow transition focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2'
+                      >
+                        Xoá
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Mobile/Tablet stacked layout with labeled rows */}
+                  <div className='lg:hidden p-4 flex flex-col gap-3'>
+                    <div className='flex gap-3'>
+                      <ImageWithFallback
+                        className='h-24 w-24 rounded-md object-cover flex-shrink-0'
+                        src={item.product.imageUrl}
+                        alt={item.product.name}
+                      />
+                      <div className='min-w-0'>
+                        <p
+                          className='text-base sm:text-lg font-semibold text-gray-900 truncate'
+                          title={item.product.name}
+                        >
+                          {item.product.name}
+                        </p>
+                        <p className='text-sm text-gray-500'>
+                          Mã sản phẩm: {item.product.code || 'N/A'}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className='grid grid-cols-2 gap-2 rounded-xl border border-gray-100 overflow-hidden'>
+                      <div className='p-3 bg-gray-50'>
+                        <p className='text-xs text-gray-500'>Đơn giá</p>
+                        <p
+                          className={`text-base font-semibold ${
+                            item.product.flashPrice ? 'text-emerald-600' : 'text-orange-600'
+                          }`}
+                        >
+                          {unitPrice.toLocaleString()} VNĐ
+                        </p>
+                      </div>
+                      <div className='p-3'>
+                        <p className='text-xs text-gray-500'>Số lượng</p>
+                        <div className='mt-1 flex items-center gap-2'>
+                          <button
+                            type='button'
+                            className='w-8 h-8 rounded-full bg-gray-50 text-gray-700 grid place-items-center border border-gray-200 hover:bg-gray-100 active:scale-95 transition'
+                            onClick={() => {
+                              setSelectedItem(item);
+                              // setIsModalOpen(true);
+                              handleUpdateV2({
+                                productId: item.product.id,
+                                newQuantity: Number(item.quantity - 1),
+                              });
+                            }}
+                            aria-label='Giảm số lượng'
+                          >
+                            −
+                          </button>
+                          <input
+                            className='w-12 h-8 text-center border border-gray-200 rounded-md bg-white text-gray-900 select-none'
+                            type='text'
+                            readOnly
+                            disabled
+                            value={item.quantity}
+                            aria-label='Số lượng hiện tại'
+                          />
+                          <button
+                            type='button'
+                            className='w-8 h-8 rounded-full bg-gray-50 text-gray-700 grid place-items-center border border-gray-200 hover:bg-gray-100 active:scale-95 transition'
+                            onClick={() => {
+                              setSelectedItem(item);
+                              // setIsModalOpen(true);
+                              handleUpdateV2({
+                                productId: item.product.id,
+                                newQuantity: Number(item.quantity + 1),
+                              });
+                            }}
+                            aria-label='Tăng số lượng'
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+                      <div className='p-3 bg-gray-50 col-span-2 flex items-center justify-between'>
+                        <div>
+                          <p className='text-xs text-gray-500'>Số tiền</p>
+                          <p className='text-base font-semibold text-emerald-600'>
+                            {unitPrice.toLocaleString()} VNĐ
+                          </p>
+                        </div>
+                        <Button
+                          key={item.id}
+                          type='primary'
+                          danger
+                          icon={<Trash2 className='w-4 h-4' />}
+                          loading={isPendingRemoveProduct}
+                          onClick={() => handleRemoveProduct(userId!, item.product.id)}
+                          className='!px-4 !h-9 rounded-lg'
+                        >
+                          Xoá
                         </Button>
                       </div>
                     </div>
-
                   </div>
-
                 </div>
-              </div>
-            ))}
-          </section>
-          <section className='mt-2 mb-5'>
-            <Pay data={data} />
-          </section>
+              );
+            })}
 
-          <Modal
-          open={isModalOpen}
-          onCancel={() => setIsModalOpen(false)}
-          footer
-          >
-            <div className='flex pt-5 bg-[white] rounded-[8px] flex-col'>
-                <div className='flex gap-3'>
-                  <img className='h-[160px] w-[160px] rounded-[5px] ' src={IMG} alt='Ảnh sản phẩm' />
-                  <div className='flex flex-col gap-3 pl-2 flex-wrap '>
-                    <ul className="flex flex-col lg:max-w-full max-w-[150px]">
-                      <li className="text-[18px] font-bold truncate overflow-hidden whitespace-nowrap w-full">
-                        {selectedItem?.product?.name}
-                      </li>
-                      <li>
-                        Mã sản phẩm: {selectedItem?.product.code || 'N/A'}
-                      </li>
-                    </ul>
+            {/*  Combo */}
+            {dataCartItemMemo.comboItems.map((item: IComboItemsResp) => {
+              const unitPriceCombo = item.combo.price * item.quantity;
 
-
-                    <div className='text-[16px] text-[#818181] content-center'>
-                      {(selectedItem?.product.flashPrice ?? selectedItem?.product.price)?.toLocaleString()} VNĐ
+              return (
+                <div
+                  key={item.id}
+                  className='bg-white rounded-xl shadow-sm border border-gray-100 lg:overflow-hidden'
+                >
+                  {/* Desktop grid layout for clear column distinction */}
+                  <div className='hidden lg:grid grid-cols-[1fr_180px_180px_180px_120px] items-center divide-x divide-gray-100'>
+                    {/* Sản phẩm */}
+                    <div className='px-4 py-4'>
+                      <div className='flex gap-3'>
+                        <ImageWithFallback
+                          className='h-24 w-24 rounded-md object-cover flex-shrink-0'
+                          src={item.combo.imageUrl}
+                          alt={item.combo.nameCombo}
+                        />
+                        <div className='min-w-0'>
+                          <p
+                            className='text-lg font-semibold text-gray-900 truncate max-w-[400px]'
+                            title={item.combo.nameCombo}
+                          >
+                            {item.combo.nameCombo}
+                          </p>
+                          <p className='text-sm text-gray-500'>
+                            Mã sản phẩm: {item.combo.code || 'N/A'}
+                          </p>
+                        </div>
+                      </div>
                     </div>
 
-                    <div className='text-[16px] text-[#818181] mt-3 flex items-center gap-2'>
-                      <div className={`w-10 h-10 bg-[#818181] rounded-full opacity-25 text-black flex items-center justify-center 
-                          ${
-                            currentQuantity === 1 ? 'cursor-not-allowed' : 'hover:cursor-pointer'
-                          }`}
-                      onClick={handleDecreaseQuantity}
+                    {/* Đơn giá */}
+                    <div className='px-4 py-4 text-center'>
+                      <div
+                        className={`text-lg font-bold ${
+                          item.combo.price ? 'text-emerald-600' : 'text-orange-600'
+                        }`}
                       >
-                        -
+                        {item.combo.price.toLocaleString()} VNĐ
                       </div>
+                    </div>
 
-                      <input
-                        className='w-[60px] h-10 text-center'
-                        type='text'
-                        readOnly
-                        value={currentQuantity}
+                    {/* Số lượng */}
+                    <div className='px-4 py-4 text-center'>
+                      <div className='mx-auto w-max flex items-center gap-2'>
+                        <button
+                          type='button'
+                          className='w-9 h-9 rounded-full bg-gray-50 text-gray-700 grid place-items-center border border-gray-200 hover:bg-gray-100 active:scale-95 transition'
+                          onClick={() => {
+                            setSelectedItem(item);
+                            // setIsModalOpen(true);
+                            handleUpdateV2({
+                              comboId: item.combo.id,
+                              comboQuantity: Number(item.quantity + 1),
+                            });
+                          }}
+                          aria-label='Giảm số lượng'
+                        >
+                          −
+                        </button>
+                        <input
+                          className='w-14 h-9 text-center border border-gray-200 rounded-md bg-white text-gray-900 select-none'
+                          type='text'
+                          readOnly
+                          value={item.quantity}
+                          aria-label='Số lượng hiện tại'
+                        />
+                        <button
+                          type='button'
+                          className='w-9 h-9 rounded-full bg-gray-50 text-gray-700 grid place-items-center border border-gray-200 hover:bg-gray-100 active:scale-95 transition'
+                          onClick={() => {
+                            setSelectedItem(item);
+                            // setIsModalOpen(true);
+                            handleUpdateV2({
+                              comboId: item.combo.id,
+                              comboQuantity: Number(item.quantity + 1),
+                            });
+                          }}
+                          aria-label='Tăng số lượng'
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Số tiền */}
+                    <div className='px-4 py-4 text-center'>
+                      <div className='text-lg font-bold text-emerald-600'>
+                        {unitPriceCombo.toLocaleString()} VNĐ
+                      </div>
+                    </div>
+
+                    {/* Thao tác */}
+                    <div className='px-4 py-4 text-center'>
+                      <Button
+                        type='primary'
+                        danger
+                        icon={<Trash2 className='w-4 h-4' />}
+                        loading={isPendingRemoveProduct}
+                        onClick={() => handleRemoveProduct(userId!, '', item?.combo?.id)}
+                        className='!px-4 !h-10 rounded-lg shadow-sm hover:shadow transition focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2'
+                      >
+                        Xoá
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Mobile/Tablet stacked layout with labeled rows */}
+                  <div className='lg:hidden p-4 flex flex-col gap-3'>
+                    <div className='flex gap-3'>
+                      <ImageWithFallback
+                        className='h-24 w-24 rounded-md object-cover flex-shrink-0'
+                        src={item.combo.imageUrl}
+                        alt={item.combo.nameCombo}
                       />
+                      <div className='min-w-0'>
+                        <p
+                          className='text-base sm:text-lg font-semibold text-gray-900 truncate'
+                          title={item.combo.nameCombo}
+                        >
+                          {item.combo.nameCombo}
+                        </p>
+                        <p className='text-sm text-gray-500'>
+                          Mã sản phẩm: {item.combo.code || 'N/A'}
+                        </p>
+                      </div>
+                    </div>
 
-                      <div className='w-10 h-10 bg-[#818181] rounded-full opacity-50 text-black flex items-center justify-center hover:cursor-pointer'
-                      onClick={handleIncreaseQuantity}
-                      >
-                        +
+                    <div className='grid grid-cols-2 gap-2 rounded-xl border border-gray-100 overflow-hidden'>
+                      <div className='p-3 bg-gray-50'>
+                        <p className='text-xs text-gray-500'>Đơn giá</p>
+                        <p
+                          className={`text-base font-semibold ${
+                            item.combo.price ? 'text-emerald-600' : 'text-orange-600'
+                          }`}
+                        >
+                          {unitPriceCombo.toLocaleString()} VNĐ
+                        </p>
+                      </div>
+                      <div className='p-3'>
+                        <p className='text-xs text-gray-500'>Số lượng</p>
+                        <div className='mt-1 flex items-center gap-2'>
+                          <button
+                            type='button'
+                            className='w-8 h-8 rounded-full bg-gray-50 text-gray-700 grid place-items-center border border-gray-200 hover:bg-gray-100 active:scale-95 transition'
+                            onClick={() => {
+                              setSelectedItem(item);
+                              setIsModalOpen(true);
+                            }}
+                            aria-label='Giảm số lượng'
+                          >
+                            −
+                          </button>
+                          <input
+                            className='w-12 h-8 text-center border border-gray-200 rounded-md bg-white text-gray-900 select-none'
+                            type='text'
+                            readOnly
+                            disabled
+                            value={item.quantity}
+                            aria-label='Số lượng hiện tại'
+                          />
+                          <button
+                            type='button'
+                            className='w-8 h-8 rounded-full bg-gray-50 text-gray-700 grid place-items-center border border-gray-200 hover:bg-gray-100 active:scale-95 transition'
+                            onClick={() => {
+                              setSelectedItem(item);
+                              setIsModalOpen(true);
+                            }}
+                            aria-label='Tăng số lượng'
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+                      <div className='p-3 bg-gray-50 col-span-2 flex items-center justify-between'>
+                        <div>
+                          <p className='text-xs text-gray-500'>Số tiền</p>
+                          <p className='text-base font-semibold text-emerald-600'>
+                            {unitPriceCombo.toLocaleString()} VNĐ
+                          </p>
+                        </div>
+                        <Button
+                          key={item.combo.id}
+                          type='primary'
+                          danger
+                          icon={<Trash2 className='w-4 h-4' />}
+                          loading={isPendingRemoveProduct}
+                          onClick={() => handleRemoveProduct(userId!, '', item.combo.id)}
+                          className='!px-4 !h-9 rounded-lg'
+                        >
+                          Xoá
+                        </Button>
                       </div>
                     </div>
                   </div>
-                  
                 </div>
-                <div className='mt-10 flex justify-center'>
-                  <Button className={`p-5! w-30! h-12! font-bold! text-[18px]! bg-[#cf442f]! text-[white]!
-                  hover:bg-[#3e7b3e]! hover:border-[#3e7b3e]`}
-                  onClick={handleUpdate}
-                  loading={isPendingUpdateItemCart}
-                  >Lưu</Button>
-                </div>
-              </div>
-          </Modal>
+              );
+            })}
+          </section>
+
+          {/* Pay section */}
+          <section className='mt-2 mb-6'>
+            <Pay data={data} isBuyNow={false} />
+          </section>
         </>
       ) : (
-        <section className='bg-[white] h-[200px] text-center content-center text-[24px] font-bold mb-3'>
+        <section className='bg-white rounded-xl shadow-sm border border-gray-100 h-48 grid place-items-center text-xl sm:text-2xl font-semibold text-gray-700 mb-4'>
           <p>Giỏ hàng của bạn đang trống</p>
         </section>
       )}

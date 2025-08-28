@@ -22,6 +22,7 @@ export interface ItemVoucher {
 export interface ResponseVoucher {
     data: {
         content: ItemVoucher[],
+        currentTotalElementsCount: number
     }
 }
 
@@ -36,6 +37,12 @@ export interface itemsCart {
     flashPrice?:number,
 }
 
+export interface  comboItemsCart {
+    comboId: string,
+    quantity: number,
+    price: number,
+}
+
 export interface DataCart {
     recipientName: string,
     recipientPhone: string,
@@ -46,5 +53,6 @@ export interface DataCart {
     note: string,
     voucherCode: string | null,
     type: number,
-    items: itemsCart[],
+    items?: itemsCart[],
+    comboItems?: comboItemsCart[]
 }

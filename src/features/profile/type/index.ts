@@ -17,6 +17,7 @@ export interface contentOrder {
     id: string;
     code: string;
     customerName: string;
+    userId:string;
     orderStatus:number;
     orderStatusText: string;
     type: number;

@@ -5,19 +5,20 @@ import { loginUser } from '../../../services';
 import useUserStore from '../../../store/useUserStore';
 import type { FormLogin } from '../../../types';
 import useInfoUser from '../../profile/hook/useInfoUser';
+import { getFcmToken } from '../../../firebaseConfig';
 
 export const useLogin = () => {
   const navigate = useNavigate();
   const { refetch } = useInfoUser();
+
   const { isPending, mutateAsync: loginMutation } = useMutation({
     mutationKey: ['loginUser'],
     mutationFn: loginUser,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onSuccess: async (data: any) => {
       const token = data?.data?.accessToken;
-      console.log(token);
-      
       localStorage.setItem("token", token);
+
       const user = {
         username: data.data.fullName || '',
         token: data?.data?.accessToken,
@@ -39,7 +40,6 @@ export const useLogin = () => {
 
       try {
         const result = await refetch();
-
         const userData = result?.data;
 
         if (userData) {
@@ -59,6 +59,7 @@ export const useLogin = () => {
             refreshToken: data.data.refreshToken
           };
           useUserStore.getState().login(userLocalStorage);
+
           const role = useUserStore.getState().user?.role.name;
           if (role === "ROLE_MANAGER") {
             navigate('/dashboard');
@@ -66,9 +67,8 @@ export const useLogin = () => {
             navigate('/');
           }
         }
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
-        toast.error(error.message || 'Đăng nhập thất bại,vui lòng thử lại!');
+        toast.error(error.message || 'Đăng nhập thất bại, vui lòng thử lại!');
       }
     },
     onError: (err: Error) => {
@@ -77,7 +77,15 @@ export const useLogin = () => {
   });
 
   const handleLogin = async (value: FormLogin) => {
-    await loginMutation(value);
+    const fcmToken = await getFcmToken();
+    console.log("fcmToken",fcmToken);
+    
+    const data = {
+      fcmToken:fcmToken ?? undefined,
+      email: value.email,
+      password: value.password
+    }
+    await loginMutation(data);
   };
 
   return { handleLogin, isPending };

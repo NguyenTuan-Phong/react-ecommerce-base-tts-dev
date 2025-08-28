@@ -12,10 +12,10 @@ const Feedback = () => {
             <section className="md:flex-[2] flex flex-col gap-5 mt-5 order-1">
                 <div className="bg-[white] py-8 px-4 rounded-[5px]">
                     <nav className="flex gap-8">
-                        <p className="hover:cursor-pointer text-[22px] font-bold text-[#29A07E] pb-[20px] border-b border-[#29A07E]">
+                        <p className="hover:cursor-pointer text-[22px] font-bold text-[#fa7833] pb-[20px] border-b border-[#fa7833]">
                             ĐẶC ĐIỂM
                         </p>
-                        <p className="hover:cursor-pointer text-[22px] font-bold hover:border-b hover:border-[#29A07E]"
+                        <p className="hover:cursor-pointer text-[22px] font-bold hover:border-b hover:border-[#fa7833]"
                         onClick={handleScrollToForm}
                         >
                             ĐÁNH GIÁ
@@ -48,7 +48,7 @@ const Feedback = () => {
 
             <section className="md:flex-1 mt-5 order-2" ref={formRef}>
                 <div className="bg-[white] py-8 px-4 rounded-[5px]">
-                <p className="text-[22px] font-bold pb-[20px] border-b border-[#29A07E]">
+                <p className="text-[22px] font-bold pb-[20px] border-b border-[#fa7833]">
                     SẢN PHẨM TƯƠNG TỰ
                 </p>
                 <div className="h-[2px] w-full bg-[#f5f5f5]"></div>

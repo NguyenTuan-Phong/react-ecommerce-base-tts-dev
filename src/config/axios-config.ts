@@ -32,7 +32,7 @@ api.interceptors.response.use(
     async (error) => {
         const originalRequest = error.config;
         if (error.response && 
-          (error.response.status === 401 || error.response.status === 403) && 
+          error.response.status === 401 && 
           !originalRequest._retry && 
           !originalRequest.url.includes("/auth/authenticate")
         ) {
@@ -78,13 +78,16 @@ api.interceptors.response.use(
                 });
             });
         }
-
+        if (error.response && error.response.status === 403) {
+            toast.error("Truy cập bị từ chối. Bạn không có quyền thực hiện hành động này");
+            return Promise.reject(error);
+        }
         if (error.response && error.response.data) {
             return Promise.reject(error.response.data);
         }
         if (error.request) {
             return Promise.reject(
-                "Network Error: No response received from the server"
+                "Lỗi mạng: Không nhận được phản hồi từ máy chủ"
             );
         }
     }

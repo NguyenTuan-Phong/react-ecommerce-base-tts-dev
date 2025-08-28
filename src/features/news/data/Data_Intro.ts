@@ -10,20 +10,20 @@ export type Intro = {
 export const intro: Intro[] = [
   {
     id: 1,
-    title: "TÌM HIỂU VỀ CÁC LOẠI PLATE TRÊN BÀN PHÍM CƠ",
-    date: "30.06.2022",
-    image: "/images/plate-keyboard.jpg", // thay bằng đường dẫn ảnh thật
+    title: 'TÌM HIỂU VỀ CÁC LOẠI PLATE TRÊN BÀN PHÍM CƠ',
+    date: '30.06.2022',
+    image: '/images/plate-keyboard.jpg', // thay bằng đường dẫn ảnh thật
   },
   {
     id: 2,
-    title: "DỊCH VỤ IN LÓT CHUỘT THEO YÊU CẦU TẠI LẮC ĐẦU",
-    date: "19.10.2022",
-    image: "/images/custom-mousepad-service.jpg",
+    title: 'DỊCH VỤ IN LÓT CHUỘT THEO YÊU CẦU TẠI Codec',
+    date: '19.10.2022',
+    image: '/images/custom-mousepad-service.jpg',
   },
   {
     id: 3,
-    title: "GIỚI THIỆU VỀ AKKO CS SWITCH",
-    date: "30.06.2022",
-    image: "/images/akko-cs-switch.jpg",
+    title: 'GIỚI THIỆU VỀ AKKO CS SWITCH',
+    date: '30.06.2022',
+    image: '/images/akko-cs-switch.jpg',
   },
 ];

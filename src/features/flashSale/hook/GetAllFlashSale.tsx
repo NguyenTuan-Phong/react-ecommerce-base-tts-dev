@@ -11,6 +11,7 @@ export const useGetAllFlashSale = (
     data: allFlashSaleData,
     isPending: isLoadingAllFlashSale,
     error,
+  // } = useQuery<ResponseFlashSale>({
   } = useQuery<ResponseFlashSale>({
     queryKey: ["getAllFlashSale", page, size],
     queryFn: () => getAllFlashSale(page, size),

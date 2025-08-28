@@ -14,23 +14,23 @@ export const useCart = () => {
     refetchOnWindowFocus: false,
     retry: false,
     enabled: !!userId,
-    refetchOnMount:false
+    refetchOnMount: false,
   });
   //  remove items
   const { isPending: isPendingRemoveProduct, mutateAsync: removeProductMutation } = useMutation({
     mutationKey: ['removeProduct'],
-    mutationFn: ({id, productId }: {id:string, productId: string }) =>
-      removeItemsCart(id,productId),
+    mutationFn: ({ id, productId, comboId }: { id: string; productId: string; comboId?: string }) =>
+      removeItemsCart(id, productId, comboId),
     onError: (err: Error) => {
       toast.error(err.message || 'Có lỗi xảy ra vui òng thử lại sau ít phút!');
     },
     onSuccess: () => {
       refetch();
-    }
+    },
   });
 
-  const handleRemoveProduct = (id: string, productId: string) => {
-    removeProductMutation({ id, productId });
+  const handleRemoveProduct = (id: string, productId: string, comboId?: string) => {
+    removeProductMutation({ id, productId, comboId });
   };
   // clear items
   const { isPending: isPendingClearCart, mutateAsync: clearCartMutation } = useMutation({
@@ -41,7 +41,7 @@ export const useCart = () => {
     },
     onSuccess: () => {
       refetch();
-    }
+    },
   });
 
   const handleClearCart = (userId: string) => {

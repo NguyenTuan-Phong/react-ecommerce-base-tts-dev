@@ -34,20 +34,20 @@ const Chat = ({
     return (
         <div className="chat-container">
             <div className="chat-header relative">
-                Trợ Lý AI
+                Trò chuyện
                 <button className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[24px] cursor-pointer" onClick={onClick}>
                     <span>&times;</span>
                 </button>
             </div>
             <div className="chat-body">
                 {messages.map(m => (
-                <div
-                    key={m.id}
-                    className={`message ${m.sender === 'me' ? 'sent' : 'received'}`}
-                >
-                    <ImageWithFallback className="avatar" src={m.avatar} alt=""/>
-                    <div className="bubble">{m.text}</div>
-                </div>
+                    <div
+                        key={m.id}
+                        className={`message ${m.sender === 'me' ? 'sent' : 'received'}`}
+                    >
+                        <ImageWithFallback className="avatar" src={m.avatar} alt=""/>
+                        <div className="bubble">{m.text}</div>
+                    </div>
                 ))}
             </div>
             <div className="chat-footer">

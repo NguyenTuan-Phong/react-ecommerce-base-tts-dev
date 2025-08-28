@@ -42,7 +42,7 @@ const ForgetPage = () => {
                         <div className="flex">
                             <div className="w-[412px]"></div>
                             <Form.Item>
-                                <Button loading={isPendingSendOTP} htmlType="submit" style={{background: '#29A07E', color: 'white', height: 48, width: 200}}>
+                                <Button loading={isPendingSendOTP} htmlType="submit" style={{background: '#fa7833', color: 'white', height: 48, width: 200}}>
                                     LẤY MẬT KHẨU
                                 </Button>
                             </Form.Item>

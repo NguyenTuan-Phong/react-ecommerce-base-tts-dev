@@ -1,12 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { getAllVouchers } from "../../../services";
-import type { ResponseVoucher } from "../type";
 
 
-export const useVoucher = () => {
-  const { isPending, data, refetch } = useQuery<ResponseVoucher> ({
-    queryKey: ['vouchers'],
-    queryFn: () => getAllVouchers(),
+export const useVoucher = (page: number, size: number) => {
+  const { isPending, data, refetch } = useQuery ({
+    queryKey: ['vouchers',page,size],
+    queryFn: () => getAllVouchers(page,size),
     refetchOnWindowFocus: false,
     retry: false,
     refetchOnMount: false

@@ -57,25 +57,11 @@ const Search: React.FC = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const location = useLocation();
 
   useEffect(() => {
-  if (debouncedKeyword.trim() !== "") {
-    search(debouncedKeyword.trim()).then((res) => {
-      console.log("SEARCH RESULT", res); 
-    });
-  }
-}, [debouncedKeyword]);
-
-const location = useLocation();
-
-useEffect(() => {
-  setShowResult(false);
-}, [location]);
-
-
-
-
-
+    setShowResult(false);
+  }, [location]);
 
   const handleChange = (value: string) => {
     setKeyword(value);

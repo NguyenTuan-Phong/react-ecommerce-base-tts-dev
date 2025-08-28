@@ -52,7 +52,7 @@ const LoginAdmin = () => {
                             <Button
                                 loading={isPending}
                                 htmlType="submit"
-                                style={{ height: 48, width: '100%', backgroundColor: '#29A07E', color: 'white', fontSize: '16px' }}
+                                style={{ height: 48, width: '100%', backgroundColor: '#fa7833', color: 'white', fontSize: '16px' }}
                                 className="rounded-md"
                             >
                                 {isPending ? "Đang đăng nhập" : "Đăng nhập"}

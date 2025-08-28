@@ -10,13 +10,14 @@ import { Link } from "react-router-dom";
 import { useGetOrderByUserId } from "../hook/useGetOrderByUserId";
 const OrderCard = () => {
   const [page, setPage] = useState(0);
-  const size = 5;
+  const [size, setSize] = useState(5);
+  const [showAll, setShowAll] = useState(false);
+  const [showOrderId, setShowOrderId] = useState<string | null>(null);
   const {
         isPendingGetOrderByUserId,
         ResponseGetOrderByUserId
   } = useGetOrderByUserId(page, size);
   const data = ResponseGetOrderByUserId?.data.content || []
-  console.log(data);
   
 
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
@@ -42,6 +43,16 @@ const OrderCard = () => {
       time: matchedItem?.createdAt || null,
     };
   });
+
+  const handleShowMore = (code: string) => {
+    setShowOrderId(code)
+    setShowAll(true)
+  }
+
+  const handleShowLess = () => {
+    setShowAll(false)
+  }
+
 
   const getBorderColor = (statusKey: string, isDone: boolean, isCurrent: boolean) => {
     if (isDone || isCurrent) {
@@ -110,22 +121,49 @@ const OrderCard = () => {
                           )}
                         </div>
 
-                        <div className='flex flex-col md:flex-row pt-4 gap-3 hover:cursor-pointer'
-                        onClick={() => handleViewHistoryStatusOrder(item.id, item.code)}
+                      <div className='flex md:flex-row pt-4 gap-3 hover:cursor-pointer'
+                        
                       >
-                        <div className='flex flex-col gap-3 flex-1'>
-                          {item.items.map((i) => (
-                            <div key={i.productCode} className='flex gap-2'>
-                              <div className='border w-[100px] h-[100px] flex-shrink-0'>
-                                <img className='w-full h-full object-cover' src='/images/default.png' alt='LB' />
+                        <div className="flex-1">
+                          <div className='flex flex-col gap-3 flex-1'
+                          onClick={() => handleViewHistoryStatusOrder(item.id, item.code)}
+                          >
+                            {(showAll && showOrderId === item.code ? item.items : item.items.slice(0, 3)).map((i) => (
+                              <div key={i.productCode} className='flex gap-2'>
+                                <div className='border w-[100px] h-[100px] flex-shrink-0'>
+                                  <img className='w-full h-full object-cover' src='/images/default.png' alt='LB' />
+                                </div>
+                                <div className='flex-1'>
+                                  <p className='font-semibold'>{i.productName}</p>
+                                  <p className='text-sm text-gray-600'>Mã sản phẩm: {i.productCode}</p>
+                                  <p className='text-sm text-gray-600'>Số lượng: {i.quantity}</p>
+                                </div>
                               </div>
-                              <div className='flex-1'>
-                                <p className='font-semibold'>{i.productName}</p>
-                                <p className='text-sm text-gray-600'>Mã sản phẩm: {i.productCode}</p>
-                                <p className='text-sm text-gray-600'>Số lượng: {i.quantity}</p>
+                            ))}
+
+                            
+                          </div>
+                          {item.items.length > 3 && (
+                              <div>
+                                {showAll && showOrderId === item.code ? (
+                                  <button
+                                    onClick={handleShowLess}
+                                    className='text-blue-500 hover:underline text-sm cursor-pointer mt-5'
+                                  >
+                                    Thu gọn
+                                  </button>
+                                ) : (
+                                  <button
+                                    onClick={() => handleShowMore(item.code)}
+                                    className='text-blue-500 hover:underline text-sm cursor-pointer mt-5'
+                                  >
+                                    Xem thêm
+                                  </button>
+                                )}
+                                
                               </div>
-                            </div>
-                          ))}
+                              
+                          )}
                         </div>
                         <div className='w-full md:w-[200px] text-right flex flex-col justify-end'>
                           <span className='text-sm text-gray-400 line-through'>
@@ -143,19 +181,6 @@ const OrderCard = () => {
                       </section>
                     </div>
                   </div>
-                  {/* <div className="bg-[#dedcdc]">
-                                    <div className="p-5">
-                                        <section className="">
-                                            <div className="flex gap-4 py-3 justify-end">
-                                                <b className="content-end">Thành tiền: </b>
-                                                <b className="text-[20px]">{item.totalMoney.toLocaleString()} VNĐ</b>
-                                            </div>
-                                            <div className="flex justify-end">
-                                                <button className="bg-[#ee4d2d] text-[white] px-7 py-3 rounded-[3px] hover:cursor-pointer">Mua lại</button>
-                                            </div>
-                                        </section>
-                                    </div>
-                                </div> */}
                   <div className='bg-gray-100 px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-4'>
                     <div className='justify-end'>
                       <span className='text-gray-600 text-sm'>Thành tiền:</span>
@@ -163,11 +188,11 @@ const OrderCard = () => {
                         {item.totalMoney.toLocaleString()} VNĐ
                       </span>
                     </div>
-                    <div className="flex justify-end">
+                    {/* <div className="flex justify-end">
                       <button className='bg-orange-500 text-white px-6 py-2 rounded hover:bg-orange-600 transition justify-end'>
                         Mua lại
                       </button>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               ))}
@@ -177,9 +202,14 @@ const OrderCard = () => {
           <div className='mt-10'>
             <Pagination
               align='center'
-              current={page + 1} // hiện tại
+              current={page + 1}
               pageSize={size}
-              onChange={(pageNumber) => setPage(pageNumber - 1)}
+              onChange={(pageNumber, sizeNumber) => {
+                  setPage(pageNumber - 1)
+                  setSize(sizeNumber)
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }
+              }
               total={ResponseGetOrderByUserId?.data?.currentTotalElementsCount || 1}
             />
           </div>

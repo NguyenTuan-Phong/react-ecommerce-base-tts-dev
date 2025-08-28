@@ -1,11 +1,14 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Link } from 'react-router-dom';
-import IMG from '../../../assets/img_news_event/14-maxresdefault-2-711x400.jpg';
-import { useCart } from '../hook/useCart';
+import type { CartItem, IComboItemsResp } from '../../../types';
+import ImageWithFallback from '../../../components/img/ImageWithFallback';
 
-const ViewHoverButtonCart = () => {
-  const { dataCartItem } = useCart();
-  const cartItems = dataCartItem?.data?.cartItems ?? [];
+interface Props {
+  dataCartItem: CartItem[];
+  comboItems: IComboItemsResp[];
+}
+const ViewHoverButtonCart = ({ dataCartItem, comboItems }: Props) => {
+  // const { dataCartItem } = useCart();
+  const cartItems = dataCartItem ?? [];
 
   const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const totalPrice = cartItems.reduce((sum, item) => sum + item.quantity * item.product.price, 0);
@@ -15,12 +18,16 @@ const ViewHoverButtonCart = () => {
       {cartItems.length > 0 ? (
         <div className='bg-white  shadow-lg w-[370px] max-h-[420px] flex flex-col overflow-hidden'>
           <div className='flex-1 overflow-y-auto bg-[#f8f7f7] flex flex-col gap-2'>
-            {dataCartItem?.data?.cartItems.map((item: any) => (
+            {dataCartItem.map((item: CartItem) => (
               <div key={item.id} className='flex items-center px-3 py-4 border'>
-                <img src={IMG} alt='IMG' className='w-[60px] h-[60px] object-cover rounded mr-3' />
+                <ImageWithFallback
+                  src={item.product.imageUrl} 
+                  alt={item.product.name} 
+                  className='w-[60px] h-[60px] object-cover rounded mr-3' 
+                />
                 <div className='flex-1'>
                   <div className='flex-1'>
-                    <div className='font-semibold text-[15px] leading-5 text-[#222] mb-1 line-clamp-2'>
+                    <div className='font-semibold text-[15px] leading-5 text-[#222] mb-1 line-clamp-1'>
                       {item.product.name}
                     </div>
                   </div>
@@ -31,6 +38,27 @@ const ViewHoverButtonCart = () => {
                 </div>
               </div>
             ))}
+            {comboItems &&
+              comboItems.map((item: IComboItemsResp) => (
+                <div key={item.id} className='flex items-center px-3 py-4 border'>
+                  <ImageWithFallback
+                    src={item.combo.imageUrl}
+                    alt={item.combo.nameCombo}
+                    className='w-[60px] h-[60px] object-cover rounded mr-3'
+                  />
+                  <div className='flex-1'>
+                    <div className='flex-1'>
+                      <div className='font-semibold text-[15px] leading-5 text-[#222] mb-1 line-clamp-1'>
+                        {item.combo.nameCombo}
+                      </div>
+                    </div>
+                    <div className='text-[#e74c3c] font-bold text-[17px] ml-2 flex justify-between items-center'>
+                      <div className='text-xs text-[#888]'>{item.quantity}</div>
+                      {(item.combo.price * item.quantity).toLocaleString()} VNĐ
+                    </div>
+                  </div>
+                </div>
+              ))}
           </div>
           <div className='bg-[#fafbfc] px-4 py-3'>
             <div className='flex justify-between items-center mb-3'>
@@ -41,11 +69,8 @@ const ViewHoverButtonCart = () => {
                 {totalPrice?.toLocaleString()} VNĐ
               </span>
             </div>
-            <button
-              className='w-full bg-[#22a085] hover:bg-[#1b7e6b] text-white font-bold py-3 
-                        rounded-lg text-[17px] transition hover:cursor-pointer'
-            >
-              <Link style={{ color: 'black' }} to={'/cart'}>
+            <button className='w-full bg-[#fa7833]  text-white font-bold py-3 rounded-lg text-[17px] transition hover:cursor-pointer'>
+              <Link className='text-white' to={'/cart'}>
                 THANH TOÁN NGAY
               </Link>
             </button>
