@@ -42,8 +42,7 @@ import LoginAdmin from "../features/auth/components/LoginAdmin";
 import PaymentPage from "../features/cart/components/Payment";
 import PaymentResult from "../features/cart/components/PaymentResult";
 import CheckOut from "../features/cart/components/CheckOut";
-import Article from "../features/news/components/Article";
-import ArticleDetail from "../features/news/components/ArticleDetail.tsx";
+
 
 
 // import { elements } from "chart.js";
@@ -80,8 +79,6 @@ export const routerCustomer = [
 
       // News & Extras
       { path: "/news", element: <News /> },
-      { path: "/Article", element: <Article/>},
-      { path: "/article/:id", element: <ArticleDetail /> },
       { path: "/yt", element: <YouTubeChanel /> },
       { path: "/intro", element: <Intro /> },
       { path: "/hd", element: <HD /> },

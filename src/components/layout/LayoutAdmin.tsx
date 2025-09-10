@@ -80,9 +80,9 @@ const selectedKey = getSelectedKey(location.pathname);
             label: <Link to={'admin/management-combo'}>Quản lý Combo sản phẩm</Link>,
         },
         {
-            key: 'management-article',
-            icon: <BellOutlined />,
-            label: <Link to={'admin/management-article'}>Quản lý Blog</Link>
+            key: 'management-site-setting',
+            icon: <SVGCombo />,
+            label: <Link to={'admin/management-site-setting'}>Quản lý Site Setting</Link>,
         },
     ];
 

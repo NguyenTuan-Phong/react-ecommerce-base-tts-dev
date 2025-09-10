@@ -101,11 +101,12 @@ export const API_PATHS = {
   COMPARE:{
     compare: '/products/compare'
   },
-  posts: {
-    getAll: "/post/getAll",
-    getById:"/post/getById",
-    create: "/post/create",
-    update: (id: number | string) => `/post/update/${id}`,
-    delete: (id: number | string) => `/post/delete/${id}`,
+  SITE_SETTING: {
+    create: "/siteSetting/create",
+    update: "/siteSetting/update",
+    delete: "/siteSetting/delete",
+    getById: "/siteSetting/getById", 
+    getByIds: "/siteSetting/getByIds",
+    getAll: "/siteSetting/getAll",
   },
 };

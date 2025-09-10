@@ -26,10 +26,8 @@ import RegisterPage from "../features/auth/components/RegisterPage";
 import AuthLayoutAdmin from "../components/layout/AuthLayoutAdmin";
 import MainLayoutAdmin from "../components/layout/LayoutAdmin";
 import LoginAdmin from "../features/auth/components/LoginAdmin";
-import ManagementArticle from "../features/admin/article/components/ManagementArticle.tsx";
-import CreateArticle from "../features/admin/article/components/CreateArticle.tsx";
-import EditArticle from "../features/admin/article/components/EditArticle.tsx";
-import ArticleDetailAdmin from "../features/admin/article/components/ArticleDetailAdmin.tsx";
+import SiteSettingPage from "../features/admin/siteSetting/components/siteSetting";
+
 
 
 export const routerAdmin = [
@@ -62,10 +60,7 @@ export const routerAdmin = [
             { path: "admin/view-detail-combo/:id", element: <ViewDetailCombo /> },
             { path: "admin/create-combo-product", element: <CreateComboProduct /> },
             { path: "admin/update-combo-product", element: <UpdateComboProduct /> },
-            { path: "admin/management-article", element: <ManagementArticle /> },
-            { path: "admin/create-article", element: <CreateArticle /> },
-            { path: "admin/edit-article/:id", element: <EditArticle /> },
-            { path: "admin/article/:id", element: <ArticleDetailAdmin /> },
+            { path: "admin/management-site-setting", element: <SiteSettingPage /> },
             {
                 path: "/profile",
                 element: <Profile />,
